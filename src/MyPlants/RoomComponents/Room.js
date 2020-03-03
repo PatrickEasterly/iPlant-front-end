@@ -17,9 +17,11 @@ export default function Hall({route}) {
           <Text style={styles.titleStyle}>{route.params.name} Plants</Text>
             <ScrollView>
             {thisRoomsPlants.map((plant)=>{
+
               return (
                 <Card>
-                  <CardItem bordered>
+                  {/* If the plant needs watering, the title background turns yellow; if they're all good, it's green */}
+                  <CardItem bordered style={(plant.needsWatering) ? styles.needsWater : styles.hasWater}>
                     <Text>{plant.name}</Text>
                   </CardItem>
                   <CardItem bordered>
@@ -61,5 +63,11 @@ const styles = {
       justifyContent: 'center',
       alignItems: 'center',
     },
+    needsWater: {
+      backgroundColor: 'yellow',
+    },
+    hasWater: {
+      backgroundColor: 'blue',
+    }
   }
   
