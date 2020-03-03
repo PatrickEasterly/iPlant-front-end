@@ -1,19 +1,65 @@
 import React from 'react';
 import { View, Text, ImageBackground, } from 'react-native';
-// import {Button} from 'native-base';
+import {Button} from 'native-base';
+const axios = require('axios');
+import { SearchBar } from 'react-native-elements';
+import { InputAutoSuggest } from 'react-native-autocomplete-search';
 
 const background = require('../../assets/bachgrund.png');
+const apiEndpoint = 'http://localhost:5000/api/plantinfo';
+
+
 export default class AddPlant extends React.Component {
+  state = {
+    search: '',
+  };
+  
+  updateSearch = search => {
+    this.setState({ search });
+  };
+  
     render () {
+      const { search } = this.state;
         return (
             <ImageBackground source={background} style={styles.background}>
+             <SearchBar
+                placeholder="Search For Plant..."
+                onChangeText={this.updateSearch}
+                value={search}
+              />
+            <Button onClick={this.searchPlantName}/> 
+              {/* <InputAutoSuggest
+                // style={{ flex: 1 }}
+                apiEndpointSuggestData={text => searchPlantName(text)}
+                // itemFormat={{id: data.id', name: 'data.name', tags:['data.continent', 'details.country']}}
+              /> */}
             <View style={styles.itemContainer}>
             <Text>Add plants page</Text> 
             </View>
             </ImageBackground> 
         )
     }
+
+  searchPlantName = () => {
+    axios.get(apiEndpoint)
+      .then(response => {
+        let plants = response.data
+      
+        console.log(plants)
+        plants.map((plant) => {
+          
+        })
+      })
+  }    
 }
+
+
+
+
+
+
+
+
 
 const styles = {
     tabbyy: {
