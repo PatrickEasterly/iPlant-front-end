@@ -96,7 +96,9 @@ const styles = {
     titleStyle: {
       fontSize: 30,
       color: 'blue',
-      textAlign: 'center'
+      textAlign: 'center',
+      marginTop: 24,
+      marginBottom: 10
     },
     background: {
       flex: 1,         // We really want this, so the background takes up the whole background
