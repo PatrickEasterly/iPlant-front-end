@@ -17,7 +17,7 @@ export default class App extends React.Component {
     return (
       <NavigationContainer>
         <Tabs.Navigator headerMode={'none'}>
-          <Tabs.Screen name="MyPlants" component={MyPlants} title='fffffffffffff'/>
+          <Tabs.Screen name="MyPlants" component={MyPlants} />
           <Tabs.Screen name="Calendar" component={Calendar} />
           <Tabs.Screen name="Social" component={Social} />
           <Tabs.Screen name="Add" component={Add} />
