@@ -10,12 +10,13 @@ const background = require('../../../assets/greenPlant1.png');
 import dummyPlants from '../../variables/dummyPlants';
 
 export default function Hall({route}) {
+  const thisRoomsPlants = dummyPlants.filter((plant)=> plant.room === route.params.name)
     return (
         <ImageBackground source={background} style={styles.background}>
           <View>
           <Text style={styles.titleStyle}>{route.params.name} Plants</Text>
             <ScrollView>
-            {dummyPlants.map((plant)=>{
+            {thisRoomsPlants.map((plant)=>{
               return (
                 <Card>
                   <CardItem bordered>
@@ -26,7 +27,7 @@ export default function Hall({route}) {
                         <Text>{plant.info}</Text>
                       </CardItem>
                       <CardItem style={styles.container}>
-                        <Text>{plant.info}</Text>
+                        <Text>{plant.room}</Text>
                       </CardItem>
                   </CardItem>
                 </Card>
