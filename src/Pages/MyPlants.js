@@ -6,13 +6,18 @@
 
 // import 'react-native-gesture-handler'; // supposedly required; mine is running fine without it.
 import React, { useState } from 'react';
-import { View, ImageBackground, ScrollView, } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { View, ImageBackground, ScrollView, TouchableOpacity, } from 'react-native';
 import dummyPlants from '../variables/dummyPlants';
 import { Button, Segment, Text, Card, CardItem } from 'native-base';
+import SinglePlant from '../MyPlants/SinglePlant';
 
 const background = require('../../assets/bachgrund.png');
 
-export default function MyPlants() {
+const Stack = createStackNavigator();
+ 
+function PlantsFirstScreen({navigation}) {
 
   // The useState hook lets us use state in a functional component.
   // const [pieceOfState, methodToUpdateState] = useState(valueOfPieceOfState)
@@ -55,7 +60,9 @@ export default function MyPlants() {
       <ScrollView>
       {dummyPlants.map((plant)=>{
         return (
+          // https://stackoverflow.com/questions/47362032/how-to-add-onpress-events-on-cards-on-native-base
           <View>
+            <TouchableOpacity onPress={()=>navigation.navigate('SinglePlant', {name: `${plant.name}`})}>
             {/* If current room is all, show all. Otherwise, if current room matches plant room, just show those. */}
             <Card style={(currentRoom==='All') ? {} : (currentRoom===plant.room) ? {} : styles.hiddenCard}>
 
@@ -71,13 +78,27 @@ export default function MyPlants() {
                     <Text>{plant.room}</Text>
                   </CardItem>
               </CardItem>
-          </Card>
+            </Card>
+            </TouchableOpacity>
           </View>
         )
       })}
       </ScrollView>
     </View>
   </ImageBackground>
+  )
+}
+
+export default function MyPlants() {
+  return (
+    <NavigationContainer independent={true}>
+      <Stack.Navigator headerMode="float" mode="modal">
+        <Stack.Screen name={'PlantsFirstScreen'} component={PlantsFirstScreen}
+        options={{headerShown: false}} />
+        <Stack.Screen name={'SinglePlant'} component={SinglePlant} />
+      </Stack.Navigator>
+    </NavigationContainer>
+
   )
 }
 
@@ -151,3 +172,4 @@ const dummyRooms = [
     name: 'Bathroom'
   },
 ];
+
