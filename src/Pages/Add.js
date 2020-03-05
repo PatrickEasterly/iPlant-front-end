@@ -1,98 +1,129 @@
 import React from 'react';
-import { View, Text, ImageBackground, } from 'react-native';
-import {Button} from 'native-base';
-const axios = require('axios');
-import { SearchBar } from 'react-native-elements';
-import { InputAutoSuggest } from 'react-native-autocomplete-search';
+import Autocomplete from 'native-base-autocomplete'; /* eslint-disable-line import/no-unresolved */
+import {
+  StyleSheet,
+  View
+} from 'react-native';
 
-const background = require('../../assets/bachgrund.png');
-const apiEndpoint = 'http://localhost:5000/api/plantinfo';
+import {
+  Container,
+  Content,
+  Text,
+  Button,
+  Item,
+  Input,
+  Icon,
+  ListItem,
+  Header, 
+  Thumbnail
+} from 'native-base';
+import axios from 'axios';
+
+// const API = 'http://localhost:5000/api/plantinfo';
+
+const API = 'http://192.168.0.150:5000/api/plantinfo';
+
+
 
 
 export default class AddPlant extends React.Component {
-  state = {
-    search: '',
-  };
-  
-  updateSearch = search => {
-    this.setState({ search });
-  };
-  
-    render () {
-      const { search } = this.state;
-        return (
-            <ImageBackground source={background} style={styles.background}>
-             <SearchBar
-                placeholder="Search For Plant..."
-                onChangeText={this.updateSearch}
-                value={search}
-              />
-            <Button onClick={this.searchPlantName}/> 
-              {/* <InputAutoSuggest
-                // style={{ flex: 1 }}
-                apiEndpointSuggestData={text => searchPlantName(text)}
-                // itemFormat={{id: data.id', name: 'data.name', tags:['data.continent', 'details.country']}}
-              /> */}
-            <View style={styles.itemContainer}>
-            <Text>Add plants page</Text> 
-            </View>
-            </ImageBackground> 
-        )
+  static renderEmployee(employee) {
+    const { latinname, commonname } = employee;
+
+    return (
+      <View>
+        <Text style={styles.directorText}>$({commonname})</Text>
+        <Text style={styles.titleText}>{latinname}</Text>
+      </View>
+    );
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      employees: [],
+      query: '',
+      selectedEmployee: null,
+    };
+  }
+
+  componentDidMount() {
+    axios.get(API)
+        .then((res) => {
+          console.log(res)
+          this.setState({ employees: res.data });
+      });
+  }
+
+  findEmployee(query) {
+    if (query === '') {
+      return [];
     }
 
-  searchPlantName = () => {
-    axios.get(apiEndpoint)
-      .then(response => {
-        let plants = response.data
-      
-        console.log(plants)
-        plants.map((plant) => {
-          
-        })
-      })
-  }    
+    const { employees } = this.state;
+    const regex = new RegExp(`${query.trim()}`, 'i');
+    return employees.filter(employee => employee.latinname.search(regex) >= 0);
+  }
+
+
+  render() {
+    const { query, selectedEmployee } = this.state;
+    const employees = this.findEmployee(query);
+    const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
+   
+    return (
+      <Container>
+      <Header searchBar rounded>
+        <Item>
+          <Icon name="ios-search" />
+          {/* <Input placeholder="Search" /> */}
+          <View style={styles.autoComplete}> 
+
+            <Autocomplete
+              autoCapitalize="none"
+              autoCorrect={false}
+              data={employees.length === 1 && comp(query, employees[0].latinname)
+                ? [] : employees}
+              defaultValue={query}
+              hideResults={selectedEmployee && selectedEmployee.latinname === query}
+              onChangeText={text => this.setState({ query: text })}
+              placeholder="Enter plant name"
+              renderItem={emp =>
+                <ListItem
+                  onPress={() => {
+                    (this.setState({ query: emp.commonname, selectedEmployee: emp }))
+                  }
+                }
+                >
+                  <Text>
+                    <Thumbnail small source={{uri: emp.photo}} />
+                    {emp.latinname}({emp.commonname})
+                  </Text>
+                </ListItem>}
+            />
+          </View>
+          {/* <Icon name="ios-people" /> */}
+        </Item>
+        <Button transparent>
+          <Text>Search</Text>
+        </Button>
+      </Header>
+    </Container>
+    );
+  }
+
+}
+
+const styles = {
+  autoComplete: {
+    // textDecoration:'none',
+    flex: 1,
+    // border:'none',
+  },
+  textinput: {
+    border:'none',
+  }
 }
 
 
-
-
-
-
-
-
-
-const styles = {
-    tabbyy: {
-      color: 'red',
-      flex: 1
-    },
-    container: {
-      flex: 1,        // This makes the app span the screen
-      // marginTop: 24   // Gives a little whitespace at the top of the screen
-    },
-    titleStyle: {
-      fontSize: 30,
-      color: 'blue'
-    },
-    background: {
-      flex: 1         // We really want this, so the background takes up the whole background
-    },
-    itemContainer: {
-      flex: 1,
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    clickMe: {
-      flex: 1,
-      color: 'blue',
-      alignItems: 'center'
-    },
-    buttonText: {
-      color: '#0f0'
-    },
-    buttonStyle: {
-      margin: 10
-    }
-  }
   
