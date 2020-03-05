@@ -60,7 +60,6 @@ function PlantsFirstScreen({navigation}) {
       <ScrollView>
       {dummyPlants.map((plant)=>{
         return (
-          // https://stackoverflow.com/questions/47362032/how-to-add-onpress-events-on-cards-on-native-base
           <View>
             <TouchableOpacity onPress={()=>navigation.navigate('SinglePlant', {name: `${plant.name}`})}>
             {/* If current room is all, show all. Otherwise, if current room matches plant room, just show those. */}
