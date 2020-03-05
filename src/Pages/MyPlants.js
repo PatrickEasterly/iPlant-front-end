@@ -5,7 +5,7 @@
 //   \ Plants
 
 // import 'react-native-gesture-handler'; // supposedly required; mine is running fine without it.
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { View, ImageBackground, ScrollView, TouchableOpacity, } from 'react-native';
@@ -16,6 +16,9 @@ import SinglePlant from '../MyPlants/SinglePlant';
 const background = require('../../assets/bachgrund.png');
 
 const Stack = createStackNavigator();
+
+// get all the plants for the user
+// http://localhost:5000/api/plants/user/1
  
 function PlantsFirstScreen({navigation}) {
 
@@ -24,6 +27,19 @@ function PlantsFirstScreen({navigation}) {
 
   const [currentTab, updateTab] = useState(0);
   const [currentRoom, updateRoom] = useState('All');
+  const [userPlants, getUserPlants] = useState([]);
+  const [currentPlant, updateCurrentPlant] = useState('noplant');
+
+  useEffect(()=>{
+    async function goGetIt() {
+        // change the userid on this dynamically
+        const response = await fetch(`http://localhost:5000/api/plants/user/1`);
+        const result = await response.json();
+        console.log(result)
+        getUserPlants(result);
+    }
+    goGetIt();
+}, [])
 
   return (
     <ImageBackground source={background} style={styles.background}>

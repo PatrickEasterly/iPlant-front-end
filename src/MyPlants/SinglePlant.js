@@ -11,6 +11,7 @@ function SinglePlant({route}){
     const [plantInfo, updatePlantInfo] = useState('fff');
     const [plantPic, updatePlantPic] = useState('null');
     
+    // https://www.robinwieruch.de/react-hooks-fetch-data
     useEffect(()=>{
         async function goGetIt() {
             const response = await fetch(`http://localhost:5000/api/plantinfo/1`);
@@ -22,14 +23,13 @@ function SinglePlant({route}){
         goGetIt();
         console.log(plantInfo);
         console.log(plantPic);
-        console.log('done')
     }, [])
     return (
         <ImageBackground source={background} style={{flex: 1}}>
             <View>
             <Card>
                 <CardItem>
-                    <Text>Stuff from plantinfo; just general info about the plant</Text>
+                    <Text>Stuff from broad plant info</Text>
                 <Text>{plantPic}</Text>
                 </CardItem>
                 <CardItem style={{flex: 1}}>
@@ -41,7 +41,10 @@ function SinglePlant({route}){
                 </CardItem>
             </Card>
             <Card>
-                <Text>F</Text>
+                <Text>Stuff from specific plant info</Text>
+                <Text>Plant room goes here</Text>
+                <Text>Plant waters go here</Text>
+                <Text>Plant upcoming care info goes here</Text>
             </Card>
             </View>
         </ImageBackground>
