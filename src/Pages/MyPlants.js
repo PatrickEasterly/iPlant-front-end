@@ -19,27 +19,33 @@ const Stack = createStackNavigator();
 
 // get all the plants for the user
 // http://localhost:5000/api/plants/user/1
+// http://192.168.0.119:6000/api/plantinfo
  
 function PlantsFirstScreen({navigation}) {
 
   // The useState hook lets us use state in a functional component.
   // const [pieceOfState, methodToUpdateState] = useState(valueOfPieceOfState)
 
+  // Pat--when you get a minute, make this const [state, setState] = useState({})
+
   const [currentTab, updateTab] = useState(0);
   const [currentRoom, updateRoom] = useState('All');
-  const [userPlants, getUserPlants] = useState([]);
-  const [currentPlant, updateCurrentPlant] = useState('noplant');
+  // const [userPlants, getUserPlants] = useState([]);
+  // const [currentPlant, updateCurrentPlant] = useState('noplant');
+  const [user, updateUser] = useState({});
+  const [rooms, updateRooms] = useState([]);
 
   useEffect(()=>{
     async function goGetIt() {
         // change the userid on this dynamically
-        const response = await fetch(`http://localhost:5000/api/plants/user/1`);
+        const response = await fetch(`http://localhost:6000/api/users/1`);
         const result = await response.json();
-        console.log(result)
-        getUserPlants(result);
+        updateUser(result);
     }
     goGetIt();
 }, [])
+
+  
 
   return (
     <ImageBackground source={background} style={styles.background}>
@@ -60,6 +66,7 @@ function PlantsFirstScreen({navigation}) {
               active={currentTab === index}
               key={index}
               onPress={()=>{
+                console.log(rooms)
                 updateTab(index);
                 updateRoom(room.name);
               }}

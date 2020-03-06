@@ -25,7 +25,7 @@ import {
 
 // const API = 'http://localhost:5000/api/plantinfo';
 
-const API = 'http://10.150.41.114:5000/api/plantinfo';
+const API = 'http://192.168.0.119:6000/api/plantinfo'; 
 // var BUTTONS = ["Option 0", "Option 1", "Option 2", "Delete", "Cancel"];
 // var DESTRUCTIVE_INDEX = 3;
 // var CANCEL_INDEX = 4;
