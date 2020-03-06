@@ -104,6 +104,7 @@ function PlantsFirstScreen({navigation}) {
   )
 }
 
+
 export default function MyPlants() {
   return (
     <NavigationContainer independent={true}>
@@ -116,6 +117,8 @@ export default function MyPlants() {
 
   )
 }
+
+
 
 const styles = {
   hiddenCard: {
