@@ -18,9 +18,6 @@ export default class MyPlants extends React.Component {
 }
 
 
-  
-
-
 const styles = {
     tabbyy: {
       color: 'red',

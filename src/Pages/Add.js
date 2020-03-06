@@ -16,16 +16,18 @@ import {
   ListItem,
   Header, 
   Thumbnail,
+  Body,
   Left,
   Right,
-  Body,
-  List
+  ListView
 } from 'native-base';
 import axios from 'axios';
 
 // const API = 'http://localhost:5000/api/plantinfo';
 
 const API = 'http://192.168.1.132:5000/api/plantinfo';
+// const {vw, vh, vmin, vmax} = require('react-native-viewport-units');
+
 
 
 
@@ -69,57 +71,20 @@ export default class AddPlant extends React.Component {
     return employees.filter(employee => employee.latinname.search(regex) >= 0);
   }
 
-  renderPlant(employees) {
-    const emp = employees.length === 1 && comp(query, employees[0].latinname)
-    ? [] : employees
-    return this.state.employees.map((emp) => {
-      return (
-      <ListItem thumbnail
-      onPress={() => {
-        (this.setState({ query: emp.commonname, selectedEmployee: emp }))
-          }
-        }
-        >
-        <Left>
-              <Thumbnail square source={{ uri: emp.photo }} />
-            </Left>
-            <Body>
-              <Text>{emp.latinname}</Text>
-              <Text note numberOfLines={1}>{emp.commonname}</Text>
-            </Body>
-            <Right>
-              <Button transparent>
-                <Text>View</Text>
-              </Button>
-            </Right>
-        {/* <Text>
-          <Thumbnail small source={{uri: emp.photo}} />
-          {emp.latinname}({emp.commonname})
-        </Text> */}
-      </ListItem>
-    )
-})
 
-}
-  
   render() {
     const { query, selectedEmployee } = this.state;
     const employees = this.findEmployee(query);
     const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
-   
     return (
       <Container>
       <Header searchBar rounded>
-        <Item regular>
+        <Item style={styles.scroll}>
           <Icon name="ios-search" />
-          <Input placeholder="Search" onChangeText={text => this.setState({ query: text })} placeholder="Enter plant name" defaultValue={query}/>
-          {/* <View style={styles.autoComplete}>  */}
-        </Item>
-        <Button transparent>
-          <Text>Search</Text>
-        </Button>
-      </Header>
-            {/* <Autocomplete
+          {/* <Input placeholder="Search" /> */}
+          <View style={styles.autoComplete}> 
+        
+            <Autocomplete
               autoCapitalize="none"
               autoCorrect={false}
               data={employees.length === 1 && comp(query, employees[0].latinname)
@@ -128,71 +93,42 @@ export default class AddPlant extends React.Component {
               hideResults={selectedEmployee && selectedEmployee.latinname === query}
               onChangeText={text => this.setState({ query: text })}
               placeholder="Enter plant name"
+              listStyle= {{flex: 1, maxHeight:800}}
               renderItem={emp =>
-               */}
-              {/* //   <Container>
-              //   <Header />
-              //   <Content>
-              //     <List>
-              //       <ListItem thumbnail>
-                      // <Left>
-                      //   <Thumbnail square source={{ uri: 'Image URL' }} />
-                      // </Left>
-                      // <Body>
-                      //   <Text>Sankhadeep</Text>
-                      //   <Text note numberOfLines={1}>Its time to build a difference . .</Text>
-                      // </Body>
-                      // <Right>
-                      //   <Button transparent>
-                      //     <Text>View</Text>
-                      //   </Button>
-                      // </Right>
-              //       </ListItem>
-              //     </List>
-              //   </Content>
-              // </Container>
-              // <Content> */}
-                <List
-                 
-                // {this.state.employees.map((employee) => {
-                //   <ListItem thumbnail
-                //   onPress={() => {
-                //     (this.setState({ query: emp.commonname, selectedEmployee: emp }))
-                //   }
-                // }
-                // >
-                //     <Left>
-                //           <Thumbnail square source={{ uri: emp.photo }} />
-                //         </Left>
-                //         <Body>
-                //           <Text>{emp.latinname}</Text>
-                //           <Text note numberOfLines={1}>{emp.commonname}</Text>
-                //         </Body>
-                //         <Right>
-                //           <Button transparent>
-                //             <Text>View</Text>
-                //           </Button>
-                //         </Right>
-                //     {/* <Text>
-                //       <Thumbnail small source={{uri: emp.photo}} />
-                //       {emp.latinname}({emp.commonname})
-                //     </Text> */}
-                //   </ListItem>
-                // })}
-                >
-                  <View>
-                    {() => this.renderPlant(employees)}
-
-                  </View>
+                // <ListView>
                 
-               </List>
-            {/* </Content> */}
-              {/* }
-            /> */}
-          {/* </View> */}
+                <ListItem thumbnail style={styles.listStyle}
+                onPress={() => {
+                  (this.setState({ query: emp.commonname, selectedEmployee: emp }))
+                }
+              }
+              >
+                  <Left>
+                    <Thumbnail square source={{ uri: emp.photo }} />
+                  </Left>
+                  <Body>
+                    <Text>{emp.latinname}</Text>
+                    <Text note numberOfLines={1}>{emp.commonname}</Text>
+                  </Body>
+                  <Right>
+                    <Button transparent>
+                      <Text>View</Text>
+                    </Button>
+                  </Right>
+                  </ListItem>
+                // </ListView>
+              }
+              />
+              </View>
+          
+
+           
           {/* <Icon name="ios-people" /> */}
-       
-       
+        </Item>
+        <Button transparent>
+          <Text>Search</Text>
+        </Button>
+      </Header>
     </Container>
     );
   }
@@ -204,9 +140,20 @@ const styles = {
     // textDecoration:'none',
     flex: 1,
     // border:'none',
+    // overflow: 'hidden',
+    // position: 'relative'
+  },
+  scroll:{
+    // overflow: 'hidden',
+    // position: 'relative'
   },
   textinput: {
     border:'none',
+  },
+  listStyle: {
+    flex: 1,
+    // width: '100%',
+    padding: 0
   }
 }
 
