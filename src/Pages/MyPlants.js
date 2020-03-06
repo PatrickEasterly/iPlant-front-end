@@ -5,20 +5,41 @@
 //   \ Plants
 
 // import 'react-native-gesture-handler'; // supposedly required; mine is running fine without it.
-import React, { useState } from 'react';
-import { View, ImageBackground, ScrollView, } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { View, ImageBackground, ScrollView, TouchableOpacity, } from 'react-native';
 import dummyPlants from '../variables/dummyPlants';
 import { Button, Segment, Text, Card, CardItem } from 'native-base';
+import SinglePlant from '../MyPlants/SinglePlant';
 
 const background = require('../../assets/bachgrund.png');
 
-export default function MyPlants() {
+const Stack = createStackNavigator();
+
+// get all the plants for the user
+// http://localhost:5000/api/plants/user/1
+ 
+function PlantsFirstScreen({navigation}) {
 
   // The useState hook lets us use state in a functional component.
   // const [pieceOfState, methodToUpdateState] = useState(valueOfPieceOfState)
 
   const [currentTab, updateTab] = useState(0);
   const [currentRoom, updateRoom] = useState('All');
+  const [userPlants, getUserPlants] = useState([]);
+  const [currentPlant, updateCurrentPlant] = useState('noplant');
+
+  useEffect(()=>{
+    async function goGetIt() {
+        // change the userid on this dynamically
+        const response = await fetch(`http://localhost:5000/api/plants/user/1`);
+        const result = await response.json();
+        console.log(result)
+        getUserPlants(result);
+    }
+    goGetIt();
+}, [])
 
   return (
     <ImageBackground source={background} style={styles.background}>
@@ -56,6 +77,7 @@ export default function MyPlants() {
       {dummyPlants.map((plant)=>{
         return (
           <View>
+            <TouchableOpacity onPress={()=>navigation.navigate('SinglePlant', {name: `${plant.name}`})}>
             {/* If current room is all, show all. Otherwise, if current room matches plant room, just show those. */}
             <Card style={(currentRoom==='All') ? {} : (currentRoom===plant.room) ? {} : styles.hiddenCard}>
 
@@ -71,7 +93,8 @@ export default function MyPlants() {
                     <Text>{plant.room}</Text>
                   </CardItem>
               </CardItem>
-          </Card>
+            </Card>
+            </TouchableOpacity>
           </View>
         )
       })}
@@ -80,6 +103,21 @@ export default function MyPlants() {
   </ImageBackground>
   )
 }
+
+
+export default function MyPlants() {
+  return (
+    <NavigationContainer independent={true}>
+      <Stack.Navigator headerMode="float" mode="modal">
+        <Stack.Screen name={'PlantsFirstScreen'} component={PlantsFirstScreen}
+        options={{headerShown: false}} />
+        <Stack.Screen name={'SinglePlant'} component={SinglePlant} />
+      </Stack.Navigator>
+    </NavigationContainer>
+
+  )
+}
+
 
 
 const styles = {
@@ -152,3 +190,4 @@ const dummyRooms = [
     name: 'Bathroom'
   },
 ];
+
