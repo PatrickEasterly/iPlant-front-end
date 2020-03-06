@@ -109,3 +109,27 @@ const dummyPlants = [
   },
 ]
 export default dummyPlants;
+
+
+
+// userid =>
+
+// given a userid, it returns an object like 
+// {
+//   userid: 1,
+//   plants: [
+//     {
+//       plantid: {
+//         plantinfo: {
+//         ...plantinfo[plantid]
+//         },
+//         roominfo: {
+//           ...theRoomItsIn
+//         },
+//         waters: {
+//           ...waters[plantid]
+//         }
+//       }
+//     }
+//   ]
+// }
