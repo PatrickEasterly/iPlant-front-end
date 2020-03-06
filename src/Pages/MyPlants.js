@@ -82,9 +82,6 @@ export default function MyPlants() {
 }
 
 
-  
-
-
 const styles = {
   hiddenCard: {
     display: 'none'
