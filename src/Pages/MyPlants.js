@@ -54,7 +54,7 @@ class PlantsFirstScreen extends React.Component {
       // Once the plants are filtered, make clickable elements for them
       plants = plants.map((plant)=>{
         return (
-          <TouchableOpacity onPress={()=>navigation.navigate('SinglePlant', {name: `${plant.name}`})}>
+          <TouchableOpacity onPress={()=>navigation.navigate('SinglePlant', {plant: plant})}>
             <Card>
               <CardItem bordered >
                 <Text>{plant.plantInfo.commonname}</Text>
