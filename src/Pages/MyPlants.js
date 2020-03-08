@@ -3,7 +3,6 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { View, ImageBackground, ScrollView, TouchableOpacity, } from 'react-native';
-// import dummyPlants from '../variables/dummyPlants';
 import { Button, Segment, Text, Card, CardItem, Container, Header, Tabs, ScrollableTab, Tab } from 'native-base';
 import SinglePlant from '../MyPlants/SinglePlant';
 import axios from 'axios';
@@ -22,7 +21,7 @@ class PlantsFirstScreen extends React.Component {
     }
   }
 
-  // didmount
+  // get rooms array, plants objects
   componentDidMount() {
     axios.get(API)
     .then((res) => {
@@ -31,11 +30,7 @@ class PlantsFirstScreen extends React.Component {
         return plant.room.roomname;
       })
       console.log(rooms)
-      let plants = res.data.plants/*.map((plant)=>{
-        return ({
-          // Strip out the important bits and save them in one object
-        })
-      })*/
+      let plants = res.data.plants
       this.setState({ user: res.data, rooms: ["All", ...rooms], plants });
     })
   }
@@ -44,100 +39,61 @@ class PlantsFirstScreen extends React.Component {
 
   // render
   // if it jitters again, see https://github.com/GeekyAnts/NativeBase/issues/1198
-    render() {
-      const {navigation} = this.props;
-
-        const roomList = this.state.rooms.map((room)=>{
-          let plants = [...this.state.plants];
-          if(room!=="All") {
-            plants = plants.filter(function(plant) {
-              return plant.room.roomname===room;
-            })
-            }
-            console.log(room)
-            console.table(plants)
-            console.log('************did it filter?')
-            plants = plants.map((plant)=>{
-              return (
-                <TouchableOpacity onPress={()=>navigation.navigate('SinglePlant', {name: `${plant.name}`})}>
-              <Card>
-                <CardItem bordered >
-                  <Text>{plant.plantInfo.commonname}</Text>
+  render() {
+    const {navigation} = this.props;
+    
+    // Render the tabs heading as roomname and tab as the appropriate content
+    const roomList = this.state.rooms.map((room)=>{
+      let plants = [...this.state.plants];
+      // Show all plants for selected room
+      if(room!=="All") {
+        plants = plants.filter(function(plant) {
+          return plant.room.roomname===room;
+      })
+      }
+      // Once the plants are filtered, make clickable elements for them
+      plants = plants.map((plant)=>{
+        return (
+          <TouchableOpacity onPress={()=>navigation.navigate('SinglePlant', {name: `${plant.name}`})}>
+            <Card>
+              <CardItem bordered >
+                <Text>{plant.plantInfo.commonname}</Text>
+              </CardItem>
+              <CardItem bordered>
+                <CardItem style={styles.container}>
+                  <Text>{plant.room.roomname}</Text>
                 </CardItem>
-                <CardItem bordered>
-                    <CardItem style={styles.container}>
-                      <Text>{plant.room.roomname}</Text>
-                    </CardItem>
-                    <CardItem style={styles.container}>
-                      <Text>{plant.plantInfo.photo}</Text>
-                    </CardItem>
+                <CardItem style={styles.container}>
+                  <Text>{plant.plantInfo.photo}</Text>
                 </CardItem>
-              </Card>
-              </TouchableOpacity>
-              )
-            })
+              </CardItem>
+            </Card>
+          </TouchableOpacity>
+        )
+      })
 
-          return (
-            <Tab heading={room}>
-                <ScrollView>
-                  {plants}
-                </ScrollView>
-            </Tab>
-          )
-        })
       return (
-        <View style={styles.itemContainer}>
-          {/* Tabs */}
-          {/* <Header hasTabs /> */}
-          {this.state.plants.length > 0 && 
+        <Tab heading={room}>
+          <ScrollView>
+            {plants}
+          </ScrollView>
+        </Tab>
+      )
+    })
+    return (
+      <View style={styles.itemContainer}>
+        {/* Tabs */}
+        {this.state.plants.length > 0 && 
           <Tabs renderTabBar={() => <ScrollableTab/>}>
-            {/* <Tab heading={"lol"}>
-            <View>
-              <ScrollView>
-                {<PlantList room={"All"}
-                plants={this.state.plants}
-                />}
-              </ScrollView>
-            </View>
-            </Tab> */}
-            {roomList}
             {roomList}
           </Tabs>
-          }
-        </View>
-      )
-    }
+        }
+      </View>
+    )
+  }
 }
 
-// function PlantList ({room, plants}) {
-//   if(room!=="All") {
-//   plants.filter(function(plant) {
-//     return plant.room.roomname===room;
-//   })
-//   }
-//   return (plants.map((plant)=>{ 
-//     console.log(plant)
-//     return (
-//         <TouchableOpacity onPress={()=>navigation.navigate('SinglePlant', {name: `${plant.name}`})}>
-//       <Card>
-//         <CardItem bordered >
-//           <Text>{plant.plantInfo.commonname}</Text>
-//         </CardItem>
-//         <CardItem bordered>
-//             <CardItem style={styles.container}>
-//               <Text>{plant.room.roomname}</Text>
-//             </CardItem>
-//             <CardItem style={styles.container}>
-//               <Text>{plant.plantInfo.photo}</Text>
-//             </CardItem>
-//         </CardItem>
-//       </Card>
-//       </TouchableOpacity>
-//       )
-//     })
-//   )
-// }
-
+// When you choose a plant, show it as a modal
 export default function MyPlants() {
     return (
       <NavigationContainer independent={true}>
