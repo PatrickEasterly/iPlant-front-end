@@ -2,12 +2,12 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { View, ImageBackground, ScrollView, TouchableOpacity, } from 'react-native';
-import { Button, Segment, Text, Card, CardItem, Container, Header, Tabs, ScrollableTab, Tab } from 'native-base';
+import { View, ImageBackground, ScrollView, TouchableOpacity, Image} from 'react-native';
+import { Button, Segment, Text, Card, CardItem, Container, Header, Tabs, ScrollableTab, Tab,  } from 'native-base';
 import SinglePlant from '../MyPlants/SinglePlant';
 import axios from 'axios';
 
-const API = 'http://192.168.1.67:6000/api/users/1'; 
+const API = 'http://192.168.1.67:6000/api/users/2'; 
 const background = require('../../assets/bachgrund.png');
 const Stack = createStackNavigator();
 
@@ -26,9 +26,8 @@ class PlantsFirstScreen extends React.Component {
     axios.get(API)
     .then((res) => {
       console.log(res.data)
-      let rooms = res.data.plants.map((plant)=>{
-        return plant.room.roomname;
-      })
+      let rooms = res.data.plants.map((plant)=>plant.room.roomname)
+      rooms = [...new Set(rooms)]
       console.log(rooms)
       let plants = res.data.plants
       this.setState({ user: res.data, rooms: ["All", ...rooms], plants });
@@ -54,17 +53,19 @@ class PlantsFirstScreen extends React.Component {
       // Once the plants are filtered, make clickable elements for them
       plants = plants.map((plant)=>{
         return (
-          <TouchableOpacity onPress={()=>navigation.navigate('SinglePlant', {name: `${plant.name}`})}>
+          <TouchableOpacity onPress={()=>navigation.navigate('SinglePlant', {plant: plant})}>
             <Card>
               <CardItem bordered >
                 <Text>{plant.plantInfo.commonname}</Text>
               </CardItem>
               <CardItem bordered>
                 <CardItem style={styles.container}>
+                  {/* <Text>{plant.room.roomname}</Text> */}
                   <Text>{plant.room.roomname}</Text>
                 </CardItem>
                 <CardItem style={styles.container}>
-                  <Text>{plant.plantInfo.photo}</Text>
+                  <Image source={{uri: plant.plantInfo.photo}} style={{height:50, width: 50}}/>
+                  <Button title="f"></Button>
                 </CardItem>
               </CardItem>
             </Card>
@@ -83,6 +84,9 @@ class PlantsFirstScreen extends React.Component {
     return (
       <View style={styles.itemContainer}>
         {/* Tabs */}
+        <View>
+          <Header hasTabs />
+        </View>
         {this.state.plants.length > 0 && 
           <Tabs renderTabBar={() => <ScrollableTab/>}>
             {roomList}

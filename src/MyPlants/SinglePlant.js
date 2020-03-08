@@ -8,37 +8,40 @@ const background = require('../../assets/furtherShoppedPlant.png')
 
 function SinglePlant({route}){
 
-    const [plantInfo, updatePlantInfo] = useState('fff');
-    const [plantPic, updatePlantPic] = useState('null');
+    // const [plantInfo, updatePlantInfo] = useState('fff');
+    // const [plantPic, updatePlantPic] = useState('null');
     
-    // https://www.robinwieruch.de/react-hooks-fetch-data
-    useEffect(()=>{
-        async function goGetIt() {
-            const response = await fetch(`http://192.168.1.67:6000/api/plantinfo/1`);
-            const result = await response.json();
-            const newPlantPic = result.photo;
-            updatePlantPic(newPlantPic);
-            updatePlantInfo(result);
-        }
-        goGetIt();
-        console.log(plantInfo);
-        console.log(plantPic);
-    }, [])
+    // // https://www.robinwieruch.de/react-hooks-fetch-data
+    // useEffect(()=>{
+    //     async function goGetIt() {
+    //         const response = await fetch(`http://192.168.1.67:6000/api/plantinfo/1`);
+    //         const result = await response.json();
+    //         const newPlantPic = result.photo;
+    //         updatePlantPic(newPlantPic);
+    //         updatePlantInfo(result);
+    //     }
+    //     goGetIt();
+    //     console.log(plantInfo);
+    //     console.log(plantPic);
+    // }, [])
+    const [plant, updatePlant] = useState(route.params.plant);
+
+
+
     return (
         <ImageBackground source={background} style={{flex: 1}}>
             <View>
             <Card>
                 <CardItem>
-                    <Text>Stuff from broad plant info</Text>
-                <Text>{plantPic}</Text>
+                <Text>{plant.plantInfo.commonname}</Text>
                 </CardItem>
-                <CardItem style={{flex: 1}}>
-                <Text>Common Name: {plantInfo.commonname}</Text>
-                <Text>Latin Name: {plantInfo.latinname}</Text>
-                <Text>Water needs: {plantInfo.waterneeds}</Text>
-                <Text>Sunlight: {plantInfo.sunlight}</Text>
-                <Image style={{width:150, height: 150}} source={plantPic} />
-                </CardItem>
+                <CardItem style={{flex: 1}}><Text>Common Name: {plant.plantInfo.commonname}</Text></CardItem>
+                
+                <Text>Latin Name: {plant.plantInfo.latinname}</Text>
+                <Text>Water needs: {plant.plantInfo.waterneeds}</Text>
+                <Text>Sunlight: {plant.plantInfo.sunlight}</Text>
+                <Image style={{width:150, height: 150}} source={{uri: plant.plantInfo.photo}} />
+                <Text> url: {plant.plantInfo.photo}</Text>
             </Card>
             <Card>
                 <Text>Stuff from specific plant info</Text>
