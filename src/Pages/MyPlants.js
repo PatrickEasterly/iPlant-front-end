@@ -54,10 +54,10 @@ class PlantsFirstScreen extends React.Component {
             </CardItem>
             <CardItem bordered>
                 <CardItem style={styles.container}>
-                  <Text>Plant info</Text>
+                  <Text>{plant.room.roomname}</Text>
                 </CardItem>
                 <CardItem style={styles.container}>
-                  <Text>Plant room</Text>
+                  <Text>{plant.plantInfo.photo}</Text>
                 </CardItem>
             </CardItem>
           </Card>
