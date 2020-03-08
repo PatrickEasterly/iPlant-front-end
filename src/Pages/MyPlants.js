@@ -17,7 +17,8 @@ class PlantsFirstScreen extends React.Component {
     super(props);
     this.state = {
       user: [],
-      rooms: []
+      rooms: [],
+      plants: []
     }
   }
 
@@ -30,7 +31,12 @@ class PlantsFirstScreen extends React.Component {
         return plant.room.roomname;
       })
       console.log(rooms)
-      this.setState({ user: res.data, rooms: rooms });
+      let plants = res.data.plants/*.map((plant)=>{
+        return ({
+          // Strip out the important bits and save them in one object
+        })
+      })*/
+      this.setState({ user: res.data, rooms: rooms, plants });
     })
   }
 
@@ -38,23 +44,52 @@ class PlantsFirstScreen extends React.Component {
   // if it jitters again, see https://github.com/GeekyAnts/NativeBase/issues/1198
     render() {
       const {navigation} = this.props;
-      const roomList = this.state.rooms.map((room)=>{
+
+      const plantList = this.state.plants.map((plant)=>{ 
+        console.log(plant)
         return (
-          <Tab heading={room}>
-
-          </Tab>
-        )
-      })
-
+          <Card>
+            <CardItem bordered >
+              <Text>{plant.plantInfo.commonname}</Text>
+            </CardItem>
+            <CardItem bordered>
+                <CardItem style={styles.container}>
+                  <Text>Plant info</Text>
+                </CardItem>
+                <CardItem style={styles.container}>
+                  <Text>Plant room</Text>
+                </CardItem>
+            </CardItem>
+          </Card>
+          )
+        })
+        const roomList = this.state.rooms.map((room)=>{
+          return (
+            <Tab heading={room}>
+                <ScrollView>
+                  {plantList}
+                </ScrollView>
+            </Tab>
+          )
+        })
       return (
-            <View style={styles.itemContainer}>
-              {/* <Header hasTabs /> */}
-              <Tabs renderTabBar={() => <ScrollableTab/>}>
-                <Tab heading={"All"}></Tab>
-                {roomList}
-                {roomList}
-              </Tabs>
+        <View style={styles.itemContainer}>
+          {/* Tabs */}
+          {/* <Header hasTabs /> */}
+          {this.state.plants.length > 0 && 
+          <Tabs renderTabBar={() => <ScrollableTab/>}>
+            <Tab heading={"lol"}>
+            <View>
+              <ScrollView>
+                {plantList}
+              </ScrollView>
             </View>
+            </Tab>
+            {roomList}
+            {roomList}
+          </Tabs>
+          }
+        </View>
       )
     }
 }
