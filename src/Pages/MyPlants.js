@@ -26,9 +26,8 @@ class PlantsFirstScreen extends React.Component {
     axios.get(API)
     .then((res) => {
       console.log(res.data)
-      let rooms = res.data.plants.map((plant)=>{
-        return plant.room.roomname;
-      })
+      let rooms = res.data.plants.map((plant)=>plant.room.roomname)
+      rooms = [...new Set(rooms)]
       console.log(rooms)
       let plants = res.data.plants
       this.setState({ user: res.data, rooms: ["All", ...rooms], plants });
