@@ -36,38 +36,51 @@ class PlantsFirstScreen extends React.Component {
           // Strip out the important bits and save them in one object
         })
       })*/
-      this.setState({ user: res.data, rooms: rooms, plants });
+      this.setState({ user: res.data, rooms: ["All", ...rooms], plants });
     })
   }
+
+
 
   // render
   // if it jitters again, see https://github.com/GeekyAnts/NativeBase/issues/1198
     render() {
       const {navigation} = this.props;
 
-      const plantList = this.state.plants.map((plant)=>{ 
-        console.log(plant)
-        return (
-          <Card>
-            <CardItem bordered >
-              <Text>{plant.plantInfo.commonname}</Text>
-            </CardItem>
-            <CardItem bordered>
-                <CardItem style={styles.container}>
-                  <Text>{plant.room.roomname}</Text>
-                </CardItem>
-                <CardItem style={styles.container}>
-                  <Text>{plant.plantInfo.photo}</Text>
-                </CardItem>
-            </CardItem>
-          </Card>
-          )
-        })
         const roomList = this.state.rooms.map((room)=>{
+          let plants = [...this.state.plants];
+          if(room!=="All") {
+            plants = plants.filter(function(plant) {
+              return plant.room.roomname===room;
+            })
+            }
+            console.log(room)
+            console.table(plants)
+            console.log('************did it filter?')
+            plants = plants.map((plant)=>{
+              return (
+                <TouchableOpacity onPress={()=>navigation.navigate('SinglePlant', {name: `${plant.name}`})}>
+              <Card>
+                <CardItem bordered >
+                  <Text>{plant.plantInfo.commonname}</Text>
+                </CardItem>
+                <CardItem bordered>
+                    <CardItem style={styles.container}>
+                      <Text>{plant.room.roomname}</Text>
+                    </CardItem>
+                    <CardItem style={styles.container}>
+                      <Text>{plant.plantInfo.photo}</Text>
+                    </CardItem>
+                </CardItem>
+              </Card>
+              </TouchableOpacity>
+              )
+            })
+
           return (
             <Tab heading={room}>
                 <ScrollView>
-                  {plantList}
+                  {plants}
                 </ScrollView>
             </Tab>
           )
@@ -78,13 +91,15 @@ class PlantsFirstScreen extends React.Component {
           {/* <Header hasTabs /> */}
           {this.state.plants.length > 0 && 
           <Tabs renderTabBar={() => <ScrollableTab/>}>
-            <Tab heading={"lol"}>
+            {/* <Tab heading={"lol"}>
             <View>
               <ScrollView>
-                {plantList}
+                {<PlantList room={"All"}
+                plants={this.state.plants}
+                />}
               </ScrollView>
             </View>
-            </Tab>
+            </Tab> */}
             {roomList}
             {roomList}
           </Tabs>
@@ -93,6 +108,35 @@ class PlantsFirstScreen extends React.Component {
       )
     }
 }
+
+// function PlantList ({room, plants}) {
+//   if(room!=="All") {
+//   plants.filter(function(plant) {
+//     return plant.room.roomname===room;
+//   })
+//   }
+//   return (plants.map((plant)=>{ 
+//     console.log(plant)
+//     return (
+//         <TouchableOpacity onPress={()=>navigation.navigate('SinglePlant', {name: `${plant.name}`})}>
+//       <Card>
+//         <CardItem bordered >
+//           <Text>{plant.plantInfo.commonname}</Text>
+//         </CardItem>
+//         <CardItem bordered>
+//             <CardItem style={styles.container}>
+//               <Text>{plant.room.roomname}</Text>
+//             </CardItem>
+//             <CardItem style={styles.container}>
+//               <Text>{plant.plantInfo.photo}</Text>
+//             </CardItem>
+//         </CardItem>
+//       </Card>
+//       </TouchableOpacity>
+//       )
+//     })
+//   )
+// }
 
 export default function MyPlants() {
     return (
