@@ -14,7 +14,7 @@ function SinglePlant({route}){
     // https://www.robinwieruch.de/react-hooks-fetch-data
     useEffect(()=>{
         async function goGetIt() {
-            const response = await fetch(`http://localhost:5000/api/plantinfo/1`);
+            const response = await fetch(`http://192.168.1.67:6000/api/plantinfo/1`);
             const result = await response.json();
             const newPlantPic = result.photo;
             updatePlantPic(newPlantPic);
