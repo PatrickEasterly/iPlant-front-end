@@ -1,5 +1,10 @@
 import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
 import Autocomplete from 'native-base-autocomplete'; /* eslint-disable-line import/no-unresolved */
+import {ImageBackground, ScrollView, TouchableOpacity, Image} from 'react-native';
+import { Button, Segment, Text, Card, CardItem, Container, Header, Tabs, ScrollableTab, Tab,  } from 'native-base';
+import SinglePlantSearch from '../MyPlants/SinglePlantSearch';
 import {
   StyleSheet,
   View
@@ -7,33 +12,32 @@ import {
 // import { StackNavigator } from "react-navigation";
 import axios from 'axios';
 import {
-  Container,
   Content,
-  Text,
-  Button,
   Item,
   Input,
   Icon,
   ListItem,
-  Header, 
   Thumbnail,
   Body,
   Left,
   Right,
   ActionSheet
 } from 'native-base';
+const Stack = createStackNavigator();
+
 
 // const API = 'http://localhost:5000/api/plantinfo';
 
-const API = 'http://192.168.1.67:6000/api/plantinfo'; 
+const API = 'http://10.150.41.114:5000/api/plantinfo'; 
+
 // var BUTTONS = ["Option 0", "Option 1", "Option 2", "Delete", "Cancel"];
 // var DESTRUCTIVE_INDEX = 3;
 // var CANCEL_INDEX = 4;
 
 
-export default class AddPlant extends React.Component {
-  static renderEmployee(employee) {
-    const { latinname, commonname } = employee;
+class PlantsSearchScreen extends React.Component {
+  static renderPlant(plant) {
+    const { latinname, commonname } = plant;
     
     return (
       <View>
@@ -46,9 +50,9 @@ export default class AddPlant extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      employees: [],
+      plants: [],
       query: '',
-      selectedEmployee: null,
+      selectedPlant: null,
       // clicked: ''
     };
   }
@@ -57,25 +61,25 @@ export default class AddPlant extends React.Component {
     axios.get(API)
     .then((res) => {
       console.log(res)
-      this.setState({ employees: res.data });
+      this.setState({ plants: res.data });
     });
   }
   
-  findEmployee(query) {
+  findPlant(query) {
     if (query === '') {
       return [];
     }
     
-    const { employees } = this.state;
+    const { plants } = this.state;
     const regex = new RegExp(`${query.trim()}`, 'i');
-    return employees.filter(employee => employee.latinname.search(regex) >= 0);
+    return plants.filter(plant => plant.latinname.search(regex) >= 0);
   }
   
   
   render() {
- 
-    const { query, selectedEmployee } = this.state;
-    const employees = this.findEmployee(query);
+    const {navigation} = this.props;
+    const { query, selectedPlant } = this.state;
+    const plants = this.findPlant(query);
     const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
     return (
       <Container>
@@ -88,25 +92,21 @@ export default class AddPlant extends React.Component {
             <Autocomplete
               autoCapitalize="none"
               autoCorrect={false}
-              data={employees.length === 1 && comp(query, employees[0].latinname)
-                ? [] : employees}
+              data={plants.length === 1 && comp(query, plants[0].latinname)
+                ? [] : plants}
               defaultValue={query}
-              hideResults={selectedEmployee && selectedEmployee.latinname === query}
+              hideResults={selectedPlant && selectedPlant.latinname === query}
               onChangeText={text => this.setState({ query: text })}
               placeholder="Enter plant name"
               inputContainerStyle={{}}
               containerStyle={{minWidth: '100%'}}
               listContainerStyle={{minWidth: '100%'}}
               listStyle= {{flex: 2, maxHeight:800, minWidth: 375}}
-              renderItem={emp =>
+              renderItem={plant =>
                 <View style={{marginRight: 20}}>
                
-
                 <ListItem thumbnail style={{margin:6, marginLeft: 0, paddingLeft: 0,}}
-                onPress={() => {
-                  (this.setState({ query: emp.commonname, selectedEmployee: emp }))
-                }
-              }
+               onPress={()=>navigation.navigate('SinglePlantSearch', {plant: plant})}
               >
                   <Left style={{marginLeft: 0, paddingLeft: 0}}>
                     <Thumbnail style={{marginLeft: 0, paddingLeft: 0, borderRadius: 5, height: 70, width: 70,
@@ -116,11 +116,11 @@ export default class AddPlant extends React.Component {
                       shadowOpacity: 0.8,
                       shadowRadius: 50,  
                   
-                    }} square source={{ uri: emp.photo }} />
+                    }} square source={{ uri: plant.photo }} />
                   </Left>
                   <Body>
-                    <Text style={{padding: 2, textTransform:'capitalize'}}>{emp.commonname}</Text>
-                    <Text style={{padding: 3, textTransform:'capitalize'}} note numberOfLines={1}>{emp.latinname}</Text>
+                    <Text style={{padding: 2, textTransform:'capitalize'}}>{plant.commonname}</Text>
+                    <Text style={{padding: 3, textTransform:'capitalize'}} note numberOfLines={1}>{plant.latinname}</Text>
                   </Body>
                   <Right>
                     <Button transparent>
@@ -130,6 +130,7 @@ export default class AddPlant extends React.Component {
                     </Button>
                   </Right>
                   </ListItem>
+              
               </View>
               }
               />
@@ -166,10 +167,26 @@ export default class AddPlant extends React.Component {
 
       </Content>  */}
     </Container>
+
+
     );
   }
-
+ 
+  
 }
+
+export default function MyPlants() {
+  return (
+    <NavigationContainer independent={true}>
+      <Stack.Navigator headerMode="float" mode="modal">
+        <Stack.Screen name={'PlantsSearchScreen'} component={PlantsSearchScreen}
+        options={{headerShown: false}} />
+        <Stack.Screen name={'SinglePlantSearch'} component={SinglePlantSearch} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
+}
+
 
 const styles = {
   autoComplete: {

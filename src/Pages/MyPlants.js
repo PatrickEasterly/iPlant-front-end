@@ -7,7 +7,7 @@ import { Button, Segment, Text, Card, CardItem, Container, Header, Tabs, Scrolla
 import SinglePlant from '../MyPlants/SinglePlant';
 import axios from 'axios';
 
-const API = 'http://192.168.1.67:6000/api/users/2'; 
+const API = 'http://10.150.41.114:5000/api/users/1'; 
 const background = require('../../assets/bachgrund.png');
 const Stack = createStackNavigator();
 
