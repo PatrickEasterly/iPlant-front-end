@@ -39,8 +39,37 @@ class PlantsFirstScreen extends React.Component {
   }
 
   checkWater(plant) {
-    // Add the big switch statement later
-    return plant.needsWater = true;
+    // switch(plant.plantInfo.waterneeds) {
+    //   // high
+    //   case: "high, wetlands"
+    //   case: "high, wetlands, aquatic"
+    //   case: "high, aquatic"
+    //   case: "moderate, wetlands, aquatic"
+    //   case: "moderate, high, wetlands, aquatic"
+    //   case: "moderate, high"
+    //   case: "high"
+    //   case: "wetlands, aquatic"
+    //   case: "aquatic"
+    //   case: "wetlands"
+    //   case: "summer dry, wetlands"
+    //   // moerate
+    //   case: "low, moderate"
+    //   case: "low, moderate, high"
+    //   case: "moderate"
+    //   case: "moderate, wetlands"
+    //   case: "summer dry, moderate"
+    //   case: "winter dry, moderate"
+    //   case: "summer dry, low, moderate"
+    //   // low
+    //   case: "low, wetlands"
+    //   case: "summer dry, winter dry, low"
+    //   case: "summer dry, low"
+    //   case: "low"
+    //   case: "summer dry, winter dry"
+    //   case: "summer dry"
+    //   case: "winter dry, low"
+    // }
+    return plant.needsWater=true;
   }
 
   addWater(plant) {
@@ -120,11 +149,11 @@ class PlantsFirstScreen extends React.Component {
   }
 }
 
-function FuckIt() {
-  return (
-    <View><Text>Yeet</Text></View>
-  )
-}
+// function FuckIt() {
+//   return (
+//     <View><Text>Yeet</Text></View>
+//   )
+// }
 
 // When you choose a plant, show it as a modal
 export default function MyPlants() {
@@ -134,10 +163,9 @@ export default function MyPlants() {
           <Stack.Screen name={'PlantsFirstScreen'} component={PlantsFirstScreen}
           options={{headerShown: false}} />
           <Stack.Screen name={'SinglePlant'} component={SinglePlant} />
-          {/* <Stack.Screen name={'FuckIt'} component={FuckIt} /> */}
-          <Stack.Screen name={'FuckIt'}>
+          {/* <Stack.Screen name={'FuckIt'}>
             {props=><FuckIt></FuckIt>}
-          </Stack.Screen>
+          </Stack.Screen> */}
         </Stack.Navigator>
       </NavigationContainer>
     )

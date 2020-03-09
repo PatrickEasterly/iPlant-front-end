@@ -3,29 +3,60 @@ import Social from './src/Pages/Social';
 import MyProfile from './src/Pages/MyProfile';
 import Add from './src/Pages/Add';
 import Calendar from './src/Pages/Calendar';
+import Login from './src/Intros/Login';
 
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const Tabs = createBottomTabNavigator();
-
+const Stack = createStackNavigator();
+const Context = React.createContext();
 export default class App extends React.Component {
+  constructor(props){
+    super(props);
+    // Login
+    let login = await axios.post("http://localhost:500/app/user/login", {body:{username:"username"}, password:"password"});
+    let JWToken = login.token;
 
+    this.state = {
+        loggedIn: JWToken ? true : false ,
+
+    }
+    
+}
   render() {
     return (
       <NavigationContainer>
-        <Tabs.Navigator headerMode={'none'}>
-          <Tabs.Screen name="MyPlants" component={MyPlants} />
-          <Tabs.Screen name="Calendar" component={Calendar} />
-          <Tabs.Screen name="Social" component={Social} />
-          <Tabs.Screen name="Add" component={Add} />
-          <Tabs.Screen name="MyProfile" component={MyProfile} />
-        </Tabs.Navigator>
+        <Stack.Navigator headerMode={'none'}>
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="HomeStack" component={HomeStack} />
+        </Stack.Navigator>
       </NavigationContainer>
     )
   }
+  _login=()=>{
+    this.setState({
+      loggedIn: true,
+      token: ''
+    })
+  }
+}
+
+function HomeStack() {
+  return(
+    <NavigationContainer independent={true}>
+    <Tabs.Navigator headerMode={'none'}>
+      <Tabs.Screen name="MyPlants" component={MyPlants} />
+      <Tabs.Screen name="Calendar" component={Calendar} />
+      <Tabs.Screen name="Social" component={Social} />
+      <Tabs.Screen name="Add" component={Add} />
+      <Tabs.Screen name="MyProfile" component={MyProfile} />
+    </Tabs.Navigator>
+  </NavigationContainer>
+  )
 }
 
 
