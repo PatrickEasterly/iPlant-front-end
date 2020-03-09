@@ -3,11 +3,13 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { View, ImageBackground, ScrollView, TouchableOpacity, Image} from 'react-native';
-import { Button, Segment, Text, Card, CardItem, Container, Header, Tabs, ScrollableTab, Tab,  } from 'native-base';
+import { Button, Segment, Text, Card, CardItem, Container, Header, Tabs, ScrollableTab, Tab, Left, Right } from 'native-base';
 import SinglePlant from '../MyPlants/SinglePlant';
 import axios from 'axios';
+// import _ from 'lodash';
 
-const API = 'http://10.150.41.114:5000/api/users/1'; 
+// const API = 'http://192.168.0.119:6000/api/users/2'; 
+const API = 'http://b51f797c.ngrok.io/api/users/2'; 
 const background = require('../../assets/bachgrund.png');
 const Stack = createStackNavigator();
 
@@ -25,25 +27,41 @@ class PlantsFirstScreen extends React.Component {
   componentDidMount() {
     axios.get(API)
     .then((res) => {
-      console.log(res.data)
       let rooms = res.data.plants.map((plant)=>plant.room.roomname)
       rooms = [...new Set(rooms)]
-      console.log(rooms)
-      let plants = res.data.plants
+      let plants = [...res.data.plants];
+      plants.map((item)=>item.needsWater=this.checkWater(item))
+      // console.log(plants)
       this.setState({ user: res.data, rooms: ["All", ...rooms], plants });
+    })
+    // .then((res)=>{
+    // })
+  }
+
+  checkWater(plant) {
+    // Add the big switch statement later
+    return plant.needsWater = true;
+  }
+
+  addWater(plant) {
+    // Run the waterplant post, and then confirm it
+
+    // Get the plant, set needsWater to false in state
+
+    let current = {...this.state};
+    let changedPlant = current.plants[current.plants.indexOf(plant)]
+    changedPlant.needsWater = false;
+    this.setState({
+      ...current
     })
   }
 
-
-
-  // render
-  // if it jitters again, see https://github.com/GeekyAnts/NativeBase/issues/1198
   render() {
     const {navigation} = this.props;
     
     // Render the tabs heading as roomname and tab as the appropriate content
     const roomList = this.state.rooms.map((room)=>{
-      let plants = [...this.state.plants];
+      let plants = this.state.plants;
       // Show all plants for selected room
       if(room!=="All") {
         plants = plants.filter(function(plant) {
@@ -55,8 +73,14 @@ class PlantsFirstScreen extends React.Component {
         return (
           <TouchableOpacity onPress={()=>navigation.navigate('SinglePlant', {plant: plant})}>
             <Card>
-              <CardItem bordered >
-                <Text>{plant.plantInfo.commonname}</Text>
+              <CardItem bordered style={styles.horizontalContainer}>
+                <Left><Text>{plant.plantInfo.commonname}</Text></Left>
+                {plant.needsWater ?
+                <Right><Button warning onPress={()=>{
+                  this.addWater(plant)
+                }}>
+                <Text>😩💧</Text></Button></Right> :
+                <Right><Button  success><Text>😊✔️</Text></Button></Right>}
               </CardItem>
               <CardItem bordered>
                 <CardItem style={styles.container}>
@@ -65,7 +89,6 @@ class PlantsFirstScreen extends React.Component {
                 </CardItem>
                 <CardItem style={styles.container}>
                   <Image source={{uri: plant.plantInfo.photo}} style={{height:50, width: 50}}/>
-                  <Button title="f"></Button>
                 </CardItem>
               </CardItem>
             </Card>
@@ -97,6 +120,12 @@ class PlantsFirstScreen extends React.Component {
   }
 }
 
+function FuckIt() {
+  return (
+    <View><Text>Yeet</Text></View>
+  )
+}
+
 // When you choose a plant, show it as a modal
 export default function MyPlants() {
     return (
@@ -105,6 +134,10 @@ export default function MyPlants() {
           <Stack.Screen name={'PlantsFirstScreen'} component={PlantsFirstScreen}
           options={{headerShown: false}} />
           <Stack.Screen name={'SinglePlant'} component={SinglePlant} />
+          {/* <Stack.Screen name={'FuckIt'} component={FuckIt} /> */}
+          <Stack.Screen name={'FuckIt'}>
+            {props=><FuckIt></FuckIt>}
+          </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     )
@@ -139,6 +172,11 @@ export default function MyPlants() {
       background: {
         flex: 1,         // We really want this, so the background takes up the whole background
         
+      },
+      horizontalContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        // justifyContent: 'spaceBetween'
       },
       itemContainer: {
         flex: 1,
