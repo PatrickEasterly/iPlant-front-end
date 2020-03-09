@@ -13,34 +13,33 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
-const Context = React.createContext();
 export default class App extends React.Component {
   constructor(props){
     super(props);
-    // Login
-    let login = await axios.post("http://localhost:500/app/user/login", {body:{username:"username"}, password:"password"});
-    let JWToken = login.token;
-
     this.state = {
-        loggedIn: JWToken ? true : false ,
-
+        loggedIn: false,
+        token: ''
     }
-    
 }
   render() {
     return (
       <NavigationContainer>
         <Stack.Navigator headerMode={'none'}>
-          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Login" >
+            {props=><Login 
+            {...props} loggedIn={this.state.loggedIn} login={this._login}
+            />}
+          </Stack.Screen>
           <Stack.Screen name="HomeStack" component={HomeStack} />
         </Stack.Navigator>
       </NavigationContainer>
     )
   }
-  _login=()=>{
+  _login=(/*token*/)=>{
+    console.log('set')
     this.setState({
       loggedIn: true,
-      token: ''
+      token: token
     })
   }
 }

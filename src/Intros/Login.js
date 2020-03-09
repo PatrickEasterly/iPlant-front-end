@@ -21,7 +21,6 @@ import React, { Component } from 'react';
           this.state = {
               loggedIn: this.props.loggedIn
           }
-          
       }
       render() {
           
@@ -30,7 +29,7 @@ import React, { Component } from 'react';
             <Container style={{ flex: 1 }}>
               <Header>
                 <Body>
-                  <Title>iPlant</Title>
+                  <Title>Login</Title>
                 </Body>
               </Header>
               <Form>
@@ -44,7 +43,10 @@ import React, { Component } from 'react';
                 </FormItem>
                 <View style={{height: 20}}></View>
                 <Button full primary style={{ paddingBottom: 4 }}
-                onPress={(()=>navigation.navigate("HomeStack"))}
+                onPress={
+                    // ()=>navigation.navigate("HomeStack") 
+                    ()=>this.props.login
+                }
                 >
                   <Text> Login </Text>
                 </Button>
