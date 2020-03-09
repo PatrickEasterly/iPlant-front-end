@@ -21,11 +21,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 const Stack = createStackNavigator();
 
-
-const background = require('../../assets/furtherShoppedPlant.png')
+const background = require("../../assets/furtherShoppedPlant.png");
 // const plantpic = require("http://plantdatabase.kpu.ca/images/habit/tackoh1.jpg");
 
-class SinglePlant extends React.Component {
+class SinglePlantSearch extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,7 +41,7 @@ class SinglePlant extends React.Component {
       return (
         <Card>
           <CardItem bordered>
-            <Text>{plant.plantInfo.commonname}</Text>
+            <Text>{plant.commonname}</Text>
           </CardItem>
         </Card>
       );
@@ -70,17 +69,17 @@ class SinglePlant extends React.Component {
                       fontSize: 20
                     }}
                   >
-                    {plant.plantInfo.commonname}
+                    {plant.commonname}
                   </Text>
                   <Text style={{ textTransform: "capitalize" }} note>
-                    {plant.plantInfo.latinname}
+                    {plant.latinname}
                   </Text>
                 </Body>
               </Left>
             </CardItem>
             <CardItem cardBody>
               <Image
-                source={{ uri: plant.plantInfo.photo }}
+                source={{ uri: plant.photo }}
                 style={{ height: 240, width: null, flex: 1 }}
               />
             </CardItem>
@@ -137,7 +136,7 @@ class SinglePlant extends React.Component {
   }
 }
 
-export default SinglePlant;
+export default SinglePlantSearch;
 
 const styles = {
   button: {

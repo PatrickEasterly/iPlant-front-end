@@ -1,40 +1,51 @@
-import React from 'react';
-import Autocomplete from 'native-base-autocomplete'; /* eslint-disable-line import/no-unresolved */
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+import Autocomplete from "native-base-autocomplete"; /* eslint-disable-line import/no-unresolved */
 import {
-  StyleSheet,
-  View
-} from 'react-native';
-// import { StackNavigator } from "react-navigation";
-import axios from 'axios';
+  ImageBackground,
+  ScrollView,
+  TouchableOpacity,
+  Image
+} from "react-native";
 import {
-  Container,
-  Content,
-  Text,
   Button,
+  Segment,
+  Text,
+  Card,
+  CardItem,
+  Container,
+  Header,
+  Tabs,
+  ScrollableTab,
+  Tab
+} from "native-base";
+import SinglePlantSearch from "../MyPlants/SinglePlantSearch";
+import { StyleSheet, View } from "react-native";
+// import { StackNavigator } from "react-navigation";
+import axios from "axios";
+import {
+  Content,
   Item,
   Input,
   Icon,
   ListItem,
-  Header, 
   Thumbnail,
   Body,
   Left,
   Right,
   ActionSheet
-} from 'native-base';
+} from "native-base";
+import AddPlantToRoom from "../Pages/AddPlantToRoom";
 
-// const API = 'http://localhost:5000/api/plantinfo';
+const Stack = createStackNavigator();
 
-const API = 'http://192.168.1.67:6000/api/plantinfo'; 
-// var BUTTONS = ["Option 0", "Option 1", "Option 2", "Delete", "Cancel"];
-// var DESTRUCTIVE_INDEX = 3;
-// var CANCEL_INDEX = 4;
+const API = "http://10.150.41.114:5000/api/plantinfo";
 
+class PlantsSearchScreen extends React.Component {
+  static renderPlant(plant) {
+    const { latinname, commonname } = plant;
 
-export default class AddPlant extends React.Component {
-  static renderEmployee(employee) {
-    const { latinname, commonname } = employee;
-    
     return (
       <View>
         <Text style={styles.directorText}>$({commonname})</Text>
@@ -42,150 +53,151 @@ export default class AddPlant extends React.Component {
       </View>
     );
   }
-  
+
   constructor(props) {
     super(props);
     this.state = {
-      employees: [],
-      query: '',
-      selectedEmployee: null,
+      plants: [],
+      query: "",
+      selectedPlant: null
       // clicked: ''
     };
   }
-  
+
   componentDidMount() {
-    axios.get(API)
-    .then((res) => {
-      console.log(res)
-      this.setState({ employees: res.data });
+    axios.get(API).then(res => {
+      console.log(res);
+      this.setState({ plants: res.data });
     });
   }
-  
-  findEmployee(query) {
-    if (query === '') {
+
+  findPlant(query) {
+    if (query === "") {
       return [];
     }
-    
-    const { employees } = this.state;
-    const regex = new RegExp(`${query.trim()}`, 'i');
-    return employees.filter(employee => employee.latinname.search(regex) >= 0);
+
+    const { plants } = this.state;
+    const regex = new RegExp(`${query.trim()}`, "i");
+    return plants.filter(plant => plant.latinname.search(regex) >= 0);
   }
-  
-  
+
   render() {
- 
-    const { query, selectedEmployee } = this.state;
-    const employees = this.findEmployee(query);
+    const { navigation } = this.props;
+    const { query, selectedPlant } = this.state;
+    const plants = this.findPlant(query);
     const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
     return (
       <Container>
-      <Header searchBar rounded>
-        <Item style={styles.scroll}>
-          <Icon name="ios-search" />
-          {/* <Input placeholder="Search" /> */}
-        <View style={styles.autoComplete}> 
-        
-            <Autocomplete
-              autoCapitalize="none"
-              autoCorrect={false}
-              data={employees.length === 1 && comp(query, employees[0].latinname)
-                ? [] : employees}
-              defaultValue={query}
-              hideResults={selectedEmployee && selectedEmployee.latinname === query}
-              onChangeText={text => this.setState({ query: text })}
-              placeholder="Enter plant name"
-              inputContainerStyle={{}}
-              containerStyle={{minWidth: '100%'}}
-              listContainerStyle={{minWidth: '100%'}}
-              listStyle= {{flex: 2, maxHeight:800, minWidth: 375}}
-              renderItem={emp =>
-                <View style={{marginRight: 20}}>
-               
-
-                <ListItem thumbnail style={{margin:6, marginLeft: 0, paddingLeft: 0,}}
-                onPress={() => {
-                  (this.setState({ query: emp.commonname, selectedEmployee: emp }))
+        <Header searchBar rounded>
+          <Item style={styles.scroll}>
+            <Icon name="ios-search" />
+            <View style={styles.autoComplete}>
+              <Autocomplete
+                autoCapitalize="none"
+                autoCorrect={false}
+                data={
+                  plants.length === 1 && comp(query, plants[0].latinname)
+                    ? []
+                    : plants
                 }
-              }
-              >
-                  <Left style={{marginLeft: 0, paddingLeft: 0}}>
-                    <Thumbnail style={{marginLeft: 0, paddingLeft: 0, borderRadius: 5, height: 70, width: 70,
-              
-                      shadowColor: '#0000',
-                      shadowOffset: { width: 0, height: 1 },
-                      shadowOpacity: 0.8,
-                      shadowRadius: 50,  
-                  
-                    }} square source={{ uri: emp.photo }} />
-                  </Left>
-                  <Body>
-                    <Text style={{padding: 2, textTransform:'capitalize'}}>{emp.commonname}</Text>
-                    <Text style={{padding: 3, textTransform:'capitalize'}} note numberOfLines={1}>{emp.latinname}</Text>
-                  </Body>
-                  <Right>
-                    <Button transparent>
-                   
-                      <Icon name="arrow-forward" />
-              
-                    </Button>
-                  </Right>
-                  </ListItem>
-              </View>
-              }
-              />
-              </View>
-          
-          
-          
-
-           
-        
-        </Item>
-        <Button transparent>
-          <Text>Search</Text>
-        </Button>
-      </Header>
-      {/* <Content>
-              <Button
-                  onPress={() => {
-                    ActionSheet.show(
-                      {
-                        options: BUTTONS,
-                        cancelButtonIndex: CANCEL_INDEX,
-                        destructiveButtonIndex: DESTRUCTIVE_INDEX,
-                        title: "Testing ActionSheet"
-                      },
-                      buttonIndex => {
-                        this.setState({ clicked: BUTTONS[buttonIndex] });
+                defaultValue={query}
+                hideResults={selectedPlant && selectedPlant.latinname === query}
+                onChangeText={text => this.setState({ query: text })}
+                placeholder="Enter plant name"
+                inputContainerStyle={{}}
+                containerStyle={{ minWidth: "100%" }}
+                listContainerStyle={{ minWidth: "100%" }}
+                listStyle={{ flex: 2, maxHeight: 800, minWidth: 375 }}
+                renderItem={plant => (
+                  <View style={{ marginRight: 20 }}>
+                    <ListItem
+                      thumbnail
+                      style={{ margin: 6, marginLeft: 0, paddingLeft: 0 }}
+                      onPress={() =>
+                        navigation.navigate("SinglePlantSearch", {
+                          plant: plant
+                        })
                       }
-                    )}
-                  }
-                >
-            <Text>Actionsheet</Text>
-          </Button> 
+                    >
+                      <Left style={{ marginLeft: 0, paddingLeft: 0 }}>
+                        <Thumbnail
+                          style={{
+                            marginLeft: 0,
+                            paddingLeft: 0,
+                            borderRadius: 5,
+                            height: 70,
+                            width: 70,
 
-      </Content>  */}
-    </Container>
+                            shadowColor: "#0000",
+                            shadowOffset: { width: 0, height: 1 },
+                            shadowOpacity: 0.8,
+                            shadowRadius: 50
+                          }}
+                          square
+                          source={{ uri: plant.photo }}
+                        />
+                      </Left>
+                      <Body>
+                        <Text
+                          style={{ padding: 2, textTransform: "capitalize" }}
+                        >
+                          {plant.commonname}
+                        </Text>
+                        <Text
+                          style={{ padding: 3, textTransform: "capitalize" }}
+                          note
+                          numberOfLines={1}
+                        >
+                          {plant.latinname}
+                        </Text>
+                      </Body>
+                      <Right>
+                        <Button transparent>
+                          <Icon name="arrow-forward" />
+                        </Button>
+                      </Right>
+                    </ListItem>
+                  </View>
+                )}
+              />
+            </View>
+          </Item>
+          <Button transparent>
+            <Text>Search</Text>
+          </Button>
+        </Header>
+      </Container>
     );
   }
+}
 
+export default function MyPlants() {
+  return (
+    <NavigationContainer independent={true}>
+      <Stack.Navigator headerMode="float" mode="modal">
+        <Stack.Screen
+          name={"PlantsSearchScreen"}
+          component={PlantsSearchScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name={"SinglePlantSearch"}
+          component={SinglePlantSearch}
+        />
+        <Stack.Screen name={"AddPlantToRoom"} component={AddPlantToRoom} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
 
 const styles = {
   autoComplete: {
-   
-    flex: 2,
- 
+    flex: 2
   },
-  scroll:{
-    overflow: 'auto',
-    
+  scroll: {
+    overflow: "auto"
   },
   textinput: {
-    border:'none',
-  },
- 
-}
-
-
-  
+    border: "none"
+  }
+};
