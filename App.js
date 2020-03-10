@@ -21,10 +21,11 @@ export default class App extends React.Component {
     super(props);
 
     this.login = (yeet) => {
+      // debugger;
       console.log(yeet)
       this.setState(state=>({
         loggedIn: yeet,
-      }));
+      }), ()=>console.log(this.state.loggedIn, "===================="));
     };
     
     this.state = {
