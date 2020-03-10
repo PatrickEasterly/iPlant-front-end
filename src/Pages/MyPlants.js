@@ -7,6 +7,7 @@ import { Button, Segment, Text, Card, CardItem, Container, Header, Tabs, Scrolla
 import SinglePlant from '../MyPlants/SinglePlant';
 import axios from 'axios';
 import moment from 'moment';
+import { AppContext } from '../../Context';
 // import _ from 'lodash';
 
 // const API = 'http://192.168.0.119:6000/api/users/2'; 
@@ -25,6 +26,7 @@ class PlantsFirstScreen extends React.Component {
 
   // get rooms array, plants objects
   componentDidMount() {
+    console.log(this.context)
     axios.get(API)
     .then((res) => {
       let rooms = res.data.plants.map((plant)=>plant.room.roomname)
@@ -66,9 +68,15 @@ class PlantsFirstScreen extends React.Component {
     return true;
 }
 
-  addWater(plant) {
+  async addWater(plant) {
     // Run the waterplant post, and then confirm it
-
+    alert(`${plant.id}`)
+    alert(`${this.context.loggedIn}`)
+    await axios.post('http://76bebe00.ngrok.io/app/water', {"plantid": plant.id}, {
+      headers: {
+        Authorization: `BEARER ${this.context.loggedIn}`
+      }
+    })
     // Get the plant, set needsWater to false in state
 
     let current = {...this.state};
@@ -142,14 +150,8 @@ class PlantsFirstScreen extends React.Component {
     )
   }
 }
+PlantsFirstScreen.contextType = AppContext;
 
-// function FuckIt() {
-//   return (
-//     <View><Text>Yeet</Text></View>
-//   )
-// }
-
-// When you choose a plant, show it as a modal
 export default function MyPlants() {
     return (
       <NavigationContainer independent={true}>

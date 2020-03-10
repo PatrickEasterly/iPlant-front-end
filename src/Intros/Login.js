@@ -28,48 +28,44 @@ class Login extends React.Component{
               password: ''
           }
       }
-
-      // componentDidMount() {
-
-      // }
       render() {
         return (
           <AppContext.Consumer>
             {context=>(
-                        <Container style={{ flex: 1 }}>
-                        <Header>
-                          <Body>
-                            <Title>Login</Title>
-                          </Body>
-                        </Header>
-                        <Form>
-                          <FormItem floatingLabel>
-                            <Label>UserName</Label>
-                            <Input 
-                            onChangeText={text=>this.setState({username: text})}
-                            />
-                          </FormItem>
-                          <FormItem floatingLabel last>
-                            <Label>Password</Label>
-                            <Input secureTextEntry={true} 
-                            onChangeText={text=>this.setState({password: text})}
-                            />
-                          </FormItem>
-                          <View style={{height: 20}}></View>
-                          <Button full primary style={{ paddingBottom: 4 }}
-                          onPress={
-                                ()=> {
-                                  this._login(this.state.username, this.state.password)
-                                  .then(()=>context.login(this.state.token))
-                                }
-                              }
-                          >
-                            <Text>Login</Text>
-                          </Button>
-                          <View style={{height: 20}}></View>
-                          <Button full light primary><Text>SignUp</Text></Button>
-                        </Form>
-                      </Container>
+                <Container style={{ flex: 1 }}>
+                <Header>
+                  <Body>
+                    <Title>Login</Title>
+                  </Body>
+                </Header>
+                <Form>
+                  <FormItem floatingLabel>
+                    <Label>UserName</Label>
+                    <Input 
+                    onChangeText={text=>this.setState({username: text})}
+                    />
+                  </FormItem>
+                  <FormItem floatingLabel last>
+                    <Label>Password</Label>
+                    <Input secureTextEntry={true} 
+                    onChangeText={text=>this.setState({password: text})}
+                    />
+                  </FormItem>
+                  <View style={{height: 20}}></View>
+                  <Button full primary style={{ paddingBottom: 4 }}
+                  onPress={
+                        ()=> {
+                          this._login(this.state.username, this.state.password)
+                          .then(()=>context.login(this.state.token))
+                        }
+                      }
+                  >
+                    <Text>Login</Text>
+                  </Button>
+                  <View style={{height: 20}}></View>
+                  <Button full light primary><Text>SignUp</Text></Button>
+                </Form>
+              </Container>
             )}
           </AppContext.Consumer>
           );
