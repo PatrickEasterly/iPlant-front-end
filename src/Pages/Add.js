@@ -40,7 +40,7 @@ import AddPlantToRoom from "../Pages/AddPlantToRoom";
 
 const Stack = createStackNavigator();
 
-const API = "http://10.150.41.114:5000/api/plantinfo";
+const API = "http://192.168.1.132:5000/api/plantinfo";
 
 class PlantsSearchScreen extends React.Component {
   static renderPlant(plant) {
@@ -113,7 +113,7 @@ class PlantsSearchScreen extends React.Component {
                     <ListItem
                       thumbnail
                       style={{ margin: 6, marginLeft: 0, paddingLeft: 0 }}
-                      onPress={() =>
+                      onPress={() => 
                         navigation.navigate("SinglePlantSearch", {
                           plant: plant
                         })
@@ -170,6 +170,10 @@ class PlantsSearchScreen extends React.Component {
     );
   }
 }
+
+PlantsSearchScreen.contextType = AppContext;
+
+
 
 export default function MyPlants() {
   return (

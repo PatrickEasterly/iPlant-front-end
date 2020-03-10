@@ -7,7 +7,7 @@ import { Button, Segment, Text, Card, CardItem, Container, Header, Tabs, Scrolla
 import SinglePlant from '../MyPlants/SinglePlant';
 import axios from 'axios';
 
-const API = 'http://10.150.41.114:5000/api/users/1'; 
+const API = 'http://192.168.1.132:5000/api/users/1'; 
 const background = require('../../assets/bachgrund.png');
 const Stack = createStackNavigator();
 
@@ -104,7 +104,7 @@ export default function MyPlants() {
         <Stack.Navigator headerMode="float" mode="modal">
           <Stack.Screen name={'PlantsFirstScreen'} component={PlantsFirstScreen}
           options={{headerShown: false}} />
-          <Stack.Screen name={'SinglePlant'} component={SinglePlant} />
+          <Stack.Screen name={'SinglePlant'} component={SinglePlant} options={{headerShown: false}} />
         </Stack.Navigator>
       </NavigationContainer>
     )
