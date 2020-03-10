@@ -6,6 +6,7 @@ import { View, ImageBackground, ScrollView, TouchableOpacity, Image} from 'react
 import { Button, Segment, Text, Card, CardItem, Container, Header, Tabs, ScrollableTab, Tab, Left, Right } from 'native-base';
 import SinglePlant from '../MyPlants/SinglePlant';
 import axios from 'axios';
+import moment from 'moment';
 // import _ from 'lodash';
 
 // const API = 'http://192.168.0.119:6000/api/users/2'; 
@@ -34,42 +35,36 @@ class PlantsFirstScreen extends React.Component {
       this.setState({ user: res.data, rooms: ["All", ...rooms], plants });
     })
   }
-
+  //checkWater takes in a plant object with waters array.
+  // returns true if plant needs water.
+  // returns false if plant doesn't need water.
   checkWater(plant) {
-    // switch(plant.plantInfo.waterneeds) {
-    //   // high
-    //   case: "high, wetlands"
-    //   case: "high, wetlands, aquatic"
-    //   case: "high, aquatic"
-    //   case: "moderate, wetlands, aquatic"
-    //   case: "moderate, high, wetlands, aquatic"
-    //   case: "moderate, high"
-    //   case: "high"
-    //   case: "wetlands, aquatic"
-    //   case: "aquatic"
-    //   case: "wetlands"
-    //   case: "summer dry, wetlands":
-    //   // return something based on those cases
-
-    //   // moerate
-    //   case: "low, moderate"
-    //   case: "low, moderate, high"
-    //   case: "moderate"
-    //   case: "moderate, wetlands"
-    //   case: "summer dry, moderate"
-    //   case: "winter dry, moderate"
-    //   case: "summer dry, low, moderate"
-    //   // low
-    //   case: "low, wetlands"
-    //   case: "summer dry, winter dry, low"
-    //   case: "summer dry, low"
-    //   case: "low"
-    //   case: "summer dry, winter dry"
-    //   case: "summer dry"
-    //   case: "winter dry, low"
-    // }
-    // return plant.needsWater=true;
-  }
+    let now = moment();
+    let recentWater = moment(plant.waters[plant.waters.length-1].watertime);
+    console.log(moment(recentWater));
+    if (plant.plantInfo.waterneeds.includes("high")){
+        if (recentWater > now.subtract(3, 'days')){
+            return false;
+        }
+        return true;
+    }
+    if (plant.plantInfo.waterneeds.includes("moderate")){
+        if (recentWater > now.subtract(8, 'days')){
+            return false;
+        }
+        return true;
+    }
+    if (plant.plantInfo.waterneeds.includes("low")){
+        if (recentWater > now.subtract(3, 'weeks')){
+            return false;
+        }
+        return true;
+    }
+    if(plant.plantInfo.waterneeds.includes("dry")){
+        return false;
+    }
+    return true;
+}
 
   addWater(plant) {
     // Run the waterplant post, and then confirm it
