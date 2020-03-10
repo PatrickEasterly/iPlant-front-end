@@ -9,7 +9,7 @@ import axios from 'axios';
 // import _ from 'lodash';
 
 // const API = 'http://192.168.0.119:6000/api/users/2'; 
-const API = 'http://b51f797c.ngrok.io/api/users/2'; 
+const API = 'http://76bebe00.ngrok.io/api/users/2'; 
 const background = require('../../assets/bachgrund.png');
 const Stack = createStackNavigator();
 
@@ -22,6 +22,7 @@ class PlantsFirstScreen extends React.Component {
       plants: []
     }
   }
+  
 
   // get rooms array, plants objects
   componentDidMount() {
@@ -34,13 +35,43 @@ class PlantsFirstScreen extends React.Component {
       // console.log(plants)
       this.setState({ user: res.data, rooms: ["All", ...rooms], plants });
     })
-    // .then((res)=>{
-    // })
+    
   }
 
   checkWater(plant) {
-    // Add the big switch statement later
-    return plant.needsWater = true;
+    // switch(plant.plantInfo.waterneeds) {
+    //   // high
+    //   case: "high, wetlands"
+    //   case: "high, wetlands, aquatic"
+    //   case: "high, aquatic"
+    //   case: "moderate, wetlands, aquatic"
+    //   case: "moderate, high, wetlands, aquatic"
+    //   case: "moderate, high"
+    //   case: "high"
+    //   case: "wetlands, aquatic"
+    //   case: "aquatic"
+    //   case: "wetlands"
+    //   case: "summer dry, wetlands":
+    //   // return something based on those cases
+
+    //   // moerate
+    //   case: "low, moderate"
+    //   case: "low, moderate, high"
+    //   case: "moderate"
+    //   case: "moderate, wetlands"
+    //   case: "summer dry, moderate"
+    //   case: "winter dry, moderate"
+    //   case: "summer dry, low, moderate"
+    //   // low
+    //   case: "low, wetlands"
+    //   case: "summer dry, winter dry, low"
+    //   case: "summer dry, low"
+    //   case: "low"
+    //   case: "summer dry, winter dry"
+    //   case: "summer dry"
+    //   case: "winter dry, low"
+    // }
+    // return plant.needsWater=true;
   }
 
   addWater(plant) {
@@ -120,11 +151,11 @@ class PlantsFirstScreen extends React.Component {
   }
 }
 
-function FuckIt() {
-  return (
-    <View><Text>Yeet</Text></View>
-  )
-}
+// function FuckIt() {
+//   return (
+//     <View><Text>Yeet</Text></View>
+//   )
+// }
 
 // When you choose a plant, show it as a modal
 export default function MyPlants() {
@@ -134,10 +165,9 @@ export default function MyPlants() {
           <Stack.Screen name={'PlantsFirstScreen'} component={PlantsFirstScreen}
           options={{headerShown: false}} />
           <Stack.Screen name={'SinglePlant'} component={SinglePlant} />
-          {/* <Stack.Screen name={'FuckIt'} component={FuckIt} /> */}
-          <Stack.Screen name={'FuckIt'}>
+          {/* <Stack.Screen name={'FuckIt'}>
             {props=><FuckIt></FuckIt>}
-          </Stack.Screen>
+          </Stack.Screen> */}
         </Stack.Navigator>
       </NavigationContainer>
     )

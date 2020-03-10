@@ -40,7 +40,7 @@ import AddPlantToRoom from "../Pages/AddPlantToRoom";
 
 const Stack = createStackNavigator();
 
-const API = "http://10.150.41.114:5000/api/plantinfo";
+const API = "http://76bebe00.ngrok.io/api/plantinfo";
 
 class PlantsSearchScreen extends React.Component {
   static renderPlant(plant) {
