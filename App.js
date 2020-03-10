@@ -13,26 +13,36 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
+////////////////////////////////////////////////////////
+
+export const AppContext = React.createContext(
+  {
+    test1: 'f',
+    test2: 'd'
+  }
+);
+
 export default class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
         loggedIn: false,
-        token: ''
+        token: '',
+        context: AppContext
     }
 }
   render() {
+    console.log(this.state.context)
     return (
-      <NavigationContainer>
-        <Stack.Navigator headerMode={'none'}>
-          <Stack.Screen name="Login" >
-            {props=><Login 
-            {...props} loggedIn={this.state.loggedIn} login={this._login}
-            />}
+      <AppContext.Provider>
+        <NavigationContainer>
+          <Stack.Navigator headerMode={'none'}>
+            <Stack.Screen name="Login" component={Login}>
           </Stack.Screen>
           <Stack.Screen name="HomeStack" component={HomeStack} />
-        </Stack.Navigator>
-      </NavigationContainer>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AppContext.Provider>
     )
   }
   _login=(/*token*/)=>{

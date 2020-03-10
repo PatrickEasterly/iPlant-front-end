@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {AppContext} from '../../App';
 //   import {Constants} from 'expo'
   import {
     Container,
@@ -13,18 +14,32 @@ import React, { Component } from 'react';
     View,
     Form
   } from 'native-base';
+  import axios from 'axios';
   
-  
-  export default class Login extends React.Component{
+class Login extends React.Component{
       constructor(props){
           super(props);
           this.state = {
-              loggedIn: this.props.loggedIn
+              loggedIn: 'no',
+              login: 'login man',
+              test: 'unchanged'
           }
       }
+
+      componentDidMount() {
+        let login = axios.post("http://76bebe00.ngrok.io/app/user/login", {"username": "catie", "password": "pass"}).then((res)=>{
+          console.log(res)
+          console.log('*******')
+          console.log(this.context)
+          this.setState({
+            login: res.data.token,
+            token: res.data.token,
+            test: this.context
+          })
+        })
+      }
       render() {
-          
-        const {navigation} = this.props;
+        // const {navigation} = this.props;
         return (
             <Container style={{ flex: 1 }}>
               <Header>
@@ -44,22 +59,29 @@ import React, { Component } from 'react';
                 <View style={{height: 20}}></View>
                 <Button full primary style={{ paddingBottom: 4 }}
                 onPress={
-                    // ()=>navigation.navigate("HomeStack") 
-                    ()=>this.props.login
-                }
+                      // ()=>this._login()
+                      ()=>console.log(this.context)
+              }
                 >
-                  <Text> Login </Text>
+                  <Text> {this.state.login} </Text>
                 </Button>
                 <View style={{height: 20}}></View>
-                <Button full light primary><Text> Sign Up </Text></Button>
+                <Button full light primary><Text> </Text></Button>
               </Form>
             </Container>
           );
       }
+      _login=()=>{
+        const {navigation} = this.props;
+        if(this.state.token){
+          navigation.navigate("HomeStack")
+        }
+        else{alert(`${this.state.token}`)}
+      }
   }
   
-
-
+Login.contextType = AppContext;
+export default Login;
 
 ////////////////////// Fingerprint login
 // https://docs.expo.io/versions/v36.0.0/sdk/local-authentication/
