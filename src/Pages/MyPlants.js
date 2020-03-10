@@ -11,7 +11,7 @@ import { AppContext } from '../../Context';
 // import _ from 'lodash';
 
 // const API = 'http://192.168.0.119:6000/api/users/2'; 
-const API = 'http://76bebe00.ngrok.io/api/users/2'; 
+const API = 'http://4f65ff2d.ngrok.io/api/users/2'; 
 const Stack = createStackNavigator();
 
 class PlantsFirstScreen extends React.Component {
@@ -43,7 +43,7 @@ class PlantsFirstScreen extends React.Component {
   checkWater(plant) {
     let now = moment();
     let recentWater = moment(plant.waters[plant.waters.length-1].watertime);
-    console.log(moment(recentWater));
+    // console.log(moment(recentWater));
     if (plant.plantInfo.waterneeds.includes("high")){
         if (recentWater > now.subtract(3, 'days')){
             return false;
@@ -70,9 +70,9 @@ class PlantsFirstScreen extends React.Component {
 
   async addWater(plant) {
     // Run the waterplant post, and then confirm it
-    alert(`${plant.id}`)
-    alert(`${this.context.loggedIn}`)
-    await axios.post('http://76bebe00.ngrok.io/app/water', {"plantid": plant.id}, {
+    // alert(`${plant.id}`)
+    // alert(`${this.context.loggedIn}`)
+    await axios.post(`http://4f65ff2d.ngrok.io/app/water`, {"plantid": plant.id}, {
       headers: {
         Authorization: `BEARER ${this.context.loggedIn}`
       }

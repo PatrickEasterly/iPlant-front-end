@@ -40,9 +40,20 @@ class SinglePlant extends React.Component {
   _renderComponent = () => {
     let plant = this.state.plant;
     if (this.state.activePage === 1) {
+      if(plant.needsWater) {
+        return (
+          <Card>
+            <CardItem bordered>
+              <Text>Needs water</Text>
+              <Text>{plant.plantInfo.commonname}</Text>
+            </CardItem>
+          </Card>
+        );
+      }
       return (
         <Card>
           <CardItem bordered>
+            <Text>All good</Text>
             <Text>{plant.plantInfo.commonname}</Text>
           </CardItem>
         </Card>
@@ -72,9 +83,11 @@ class SinglePlant extends React.Component {
   render() {
     let plant = this.state.plant;
     const { navigation } = this.props;
+    console.log(plant.needsWater)
+    const isThirsty = plant.needsWater ? '#f0f' : '#0f0';
     return (
       <Container>
-        <Content>
+        <Content style={{backgroundColor: isThirsty}}>
           <Card>
             <CardItem>
               <Left style={{ height: 70 }}>

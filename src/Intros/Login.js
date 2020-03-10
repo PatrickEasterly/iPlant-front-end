@@ -73,7 +73,7 @@ class Login extends React.Component{
       _login= async (username, password)=> {
         const {navigation} = this.props;
         let temp;
-        let login = await axios.post("http://76bebe00.ngrok.io/app/user/login", {"username": `${username}`, "password": `${password}`}).then((res)=>{
+        let login = await axios.post("http://4f65ff2d.ngrok.io/app/user/login", {"username": `${username}`, "password": `${password}`}).then((res)=>{
           console.log(res)
           this.setState({
             login: true,
