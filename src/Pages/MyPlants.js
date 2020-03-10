@@ -10,7 +10,6 @@ import axios from 'axios';
 
 // const API = 'http://192.168.0.119:6000/api/users/2'; 
 const API = 'http://76bebe00.ngrok.io/api/users/2'; 
-const background = require('../../assets/bachgrund.png');
 const Stack = createStackNavigator();
 
 class PlantsFirstScreen extends React.Component {
@@ -22,7 +21,6 @@ class PlantsFirstScreen extends React.Component {
       plants: []
     }
   }
-  
 
   // get rooms array, plants objects
   componentDidMount() {
@@ -35,7 +33,6 @@ class PlantsFirstScreen extends React.Component {
       // console.log(plants)
       this.setState({ user: res.data, rooms: ["All", ...rooms], plants });
     })
-    
   }
 
   checkWater(plant) {
