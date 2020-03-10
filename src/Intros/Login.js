@@ -75,15 +75,13 @@ class Login extends React.Component{
         const {navigation} = this.props;
         let temp;
         let login = await axios.post("http://76bebe00.ngrok.io/app/user/login", {"username": `${username}`, "password": `${password}`}).then((res)=>{
+          res.JSON()
+          console.log(res)
           this.setState({
             login: true,
             token: res.data.token
           })
           return res;
-        })
-        .catch(error=>{
-          temp = `${error.response.status}`
-          console.log(error.response)
         })
         await login.status===200 ? navigation.navigate("HomeStack") : alert(`${temp}`)
       }
