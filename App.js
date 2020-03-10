@@ -14,44 +14,46 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
 ////////////////////////////////////////////////////////
-
-export const AppContext = React.createContext(
-  {
-    test1: 'f',
-    test2: 'd'
-  }
-);
+import {AppContext} from './Context';
 
 export default class App extends React.Component {
   constructor(props){
     super(props);
+
+    this.login = (yeet) => {
+      console.log(yeet)
+      this.setState(state=>({
+        loggedIn: yeet,
+      }));
+    };
+    
     this.state = {
-        loggedIn: false,
-        token: '',
-        context: AppContext
+      loggedIn: 'no',
+      login: this.login
     }
 }
   render() {
-    console.log(this.state.context)
+    // console.log('--------------------')
+    console.log(this.state)
     return (
-      <AppContext.Provider>
-        <NavigationContainer>
-          <Stack.Navigator headerMode={'none'}>
-            <Stack.Screen name="Login" component={Login}>
-          </Stack.Screen>
-          <Stack.Screen name="HomeStack" component={HomeStack} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </AppContext.Provider>
+          <AppContext.Provider value={this.state}>
+            <NavigationContainer>
+              <Stack.Navigator headerMode={'none'}>
+                <Stack.Screen name="Login" component={Login}>
+              </Stack.Screen>
+              <Stack.Screen name="HomeStack" component={HomeStack} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </AppContext.Provider>
     )
   }
-  _login=(/*token*/)=>{
-    console.log('set')
-    this.setState({
-      loggedIn: true,
-      token: token
-    })
-  }
+  // _login=(/*token*/)=>{
+  //   console.log('set')
+  //   this.setState({
+  //     loggedIn: true,
+  //     token: token
+  //   })
+  // }
 }
 
 function HomeStack() {

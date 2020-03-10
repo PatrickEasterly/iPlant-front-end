@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {AppContext} from '../../App';
+import {AppContext} from '../../Context';
 //   import {Constants} from 'expo'
   import {
     Container,
@@ -17,70 +17,78 @@ import {AppContext} from '../../App';
   import axios from 'axios';
   
 class Login extends React.Component{
+  // static contextType = AppContext;
       constructor(props){
           super(props);
           this.state = {
               loggedIn: 'no',
-              login: 'login man',
-              test: 'unchanged'
+              test: 'unchanged',
+              token: 'none',
+              username: '',
+              password: ''
           }
       }
 
-      componentDidMount() {
-        let login = axios.post("http://76bebe00.ngrok.io/app/user/login", {"username": "catie", "password": "pass"}).then((res)=>{
-          console.log(res)
-          console.log('*******')
-          console.log(this.context)
-          this.setState({
-            login: res.data.token,
-            token: res.data.token,
-            test: this.context
-          })
-        })
-      }
+      // componentDidMount() {
+
+      // }
       render() {
-        // const {navigation} = this.props;
         return (
-            <Container style={{ flex: 1 }}>
-              <Header>
-                <Body>
-                  <Title>Login</Title>
-                </Body>
-              </Header>
-              <Form>
-                <FormItem floatingLabel>
-                  <Label>Email</Label>
-                  <Input />
-                </FormItem>
-                <FormItem floatingLabel last>
-                  <Label>Password</Label>
-                  <Input secureTextEntry={true} />
-                </FormItem>
-                <View style={{height: 20}}></View>
-                <Button full primary style={{ paddingBottom: 4 }}
-                onPress={
-                      // ()=>this._login()
-                      ()=>console.log(this.context)
-              }
-                >
-                  <Text> {this.state.login} </Text>
-                </Button>
-                <View style={{height: 20}}></View>
-                <Button full light primary><Text> </Text></Button>
-              </Form>
-            </Container>
+          <Container style={{ flex: 1 }}>
+            <Header>
+              <Body>
+                <Title>Login</Title>
+              </Body>
+            </Header>
+            <Form>
+              <FormItem floatingLabel>
+                <Label>UserName</Label>
+                <Input 
+                onChangeText={text=>this.setState({username: text})}
+                />
+              </FormItem>
+              <FormItem floatingLabel last>
+                <Label>Password</Label>
+                <Input secureTextEntry={true} 
+                onChangeText={text=>this.setState({password: text})}
+                />
+              </FormItem>
+              <View style={{height: 20}}></View>
+              <Button full primary style={{ paddingBottom: 4 }}
+              onPress={
+                    ()=> {
+                      // console.log(this.state)
+                      this._login(this.state.username, this.state.password)
+                      .then(this.context.login(this.state.token))
+                    }
+                  }
+              >
+                <Text>Login</Text>
+              </Button>
+              <View style={{height: 20}}></View>
+              <Button full light primary><Text>SignUp</Text></Button>
+            </Form>
+          </Container>
           );
       }
-      _login=()=>{
+      _login= async (username, password)=> {
         const {navigation} = this.props;
-        if(this.state.token){
-          navigation.navigate("HomeStack")
-        }
-        else{alert(`${this.state.token}`)}
+        let temp;
+        let login = await axios.post("http://76bebe00.ngrok.io/app/user/login", {"username": `${username}`, "password": `${password}`}).then((res)=>{
+          this.setState({
+            login: true,
+            token: res.data.token
+          })
+          return res;
+        })
+        .catch(error=>{
+          temp = `${error.response.status}`
+          console.log(error.response)
+        })
+        await login.status===200 ? navigation.navigate("HomeStack") : alert(`${temp}`)
       }
   }
-  
-Login.contextType = AppContext;
+  Login.contextType = AppContext;
 export default Login;
 
 ////////////////////// Fingerprint login
