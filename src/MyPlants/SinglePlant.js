@@ -19,6 +19,7 @@ import { ImageBackground, Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+import moment from 'moment';
 const Stack = createStackNavigator();
 
 
@@ -48,7 +49,22 @@ class SinglePlant extends React.Component {
       );
     }
     if (this.state.activePage === 2) {
-      return <Text>History Tab</Text>;
+      return (
+        <View>
+          <Text>Care History</Text>
+          <Card>
+            {/* Currently returns 'You watered on: 2020-01-08', lets make it prettier */}
+            {plant.waters.map((water)=>{
+              let wawa = water.watertime.split('').slice(0, water.watertime.indexOf('T')).join('') //["2", "0", "2", "0", "-", "0", "1", "-", "0", "8"]
+              return (
+                <CardItem bordered>
+                  <Text>You watered on: {wawa}</Text>
+                </CardItem>
+              )
+            })}
+          </Card>
+        </View>
+      )
     } else {
       return <Text>Tab for other stuff</Text>;
     }
