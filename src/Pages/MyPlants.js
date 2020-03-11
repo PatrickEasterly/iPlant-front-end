@@ -43,15 +43,28 @@ class PlantsFirstScreen extends React.Component {
     }
     )
     .then((res) => {
-      console.log(res)
-      let rooms = res.data.plants.map((plant)=>plant.room.roomname)
-      rooms = [...new Set(rooms)]
-      let plants = [...res.data.plants];
-      console.log(plants)
-      plants.map((item)=>item.needsWater=this.checkWater(item))
-      // console.log(plants)
-      this.setState({ user: res.data, rooms: ["All", ...rooms], plants });
-      
+      // console.log(res)
+      let rooms = res.data.rooms.map((room)=>{
+        room.plants = res.data.plants.filter((plant)=> plant.room.id == room.id);
+        // let rooms = res.data.plants.map((plant)=>plant.room.roomname)
+        // rooms = [...new Set(rooms)]
+        // let plants = [...res.data.plants];
+        // console.log(this.state.rooms)
+        // this.state.rooms.plants.map((item)=>item.needsWater=this.checkWater(item))
+        // // // console.log(plants)
+        // this.setState({ user: res.data, plants});
+        return room
+      })
+      this.setState({
+        rooms: rooms
+      })
+      console.log(this.state.rooms)
+      console.log(this.state.rooms)
+
+      this.state.rooms.map((room)=>{
+        room.plants.map((plant)=>plant.needsWater=this.checkWater(plant))
+      })
+
     })
   }
 
@@ -90,7 +103,7 @@ class PlantsFirstScreen extends React.Component {
 
   async addWater(plant) {
     // Run the waterplant post, and then confirm it
-    await axios.post(`http://833a33e6.ngrok.io/app/water`, 
+    await axios.post(`http://192.168.0.150:5000/app/water`, 
     {"plantid": plant.id}, {
       headers: {
         Authorization: `BEARER ${this.context.loggedIn}`
@@ -98,7 +111,9 @@ class PlantsFirstScreen extends React.Component {
     })
     // Get the plant, set needsWater to false in state
     let current = {...this.state};
-    let changedPlant = current.plants[current.plants.indexOf(plant)]
+    console.log("*************")
+    console.log(current)
+    let changedPlant = current.rooms.plants[current.plants.indexOf(plant)]
     changedPlant.needsWater = false;
     console.log(plants)
     this.setState({
@@ -114,16 +129,17 @@ class PlantsFirstScreen extends React.Component {
       const {navigation} = this.props;
       
       // Render the tabs heading as roomname and tab as the appropriate content
+      
       const roomList = this.state.rooms.map((room)=>{
-        let plants = this.state.plants;
+        // console.log(plants)
         // Show all plants for selected room
-        if(room!=="All") {
-          plants = plants.filter(function(plant) {
-            return plant.room.roomname===room;
-        })
-        }
-        // Once the plants are filtered, make clickable elements for them
-        plants = plants.map((plant)=>{
+        // if(room!=="All") {
+        //   plants = plants.filter(function(plant) {
+        //     return plant.room.roomname===room;
+        // })
+        
+        // // Once the plants are filtered, make clickable elements for them
+        let plants = room.plants.map((plant)=>{
           return (
             <TouchableOpacity 
             key={plant.id} 
@@ -131,7 +147,7 @@ class PlantsFirstScreen extends React.Component {
               <Card>
                 <CardItem bordered style={styles.horizontalContainer}>
                   <Left><Text>{plant.plantInfo.commonname}</Text></Left>
-                  {plant.needsWater ?
+                  {!plant.needsWater ?
                   <Right><Button warning onPress={()=>{
                     this.addWater(plant)
                   }}>
@@ -154,14 +170,15 @@ class PlantsFirstScreen extends React.Component {
   
         return (
         
-          <Tab heading={room}>
-            
+          <Tab heading={room.roomname}>
             <ScrollView>
               {plants}
             </ScrollView>
           </Tab>
         )
       })
+
+      
       return (
         <AppContext.Consumer>
           {context => {
@@ -174,7 +191,7 @@ class PlantsFirstScreen extends React.Component {
               <View>
                 <Header hasTabs />
               </View>
-              {this.state.plants.length > 0 && 
+              {this.state.rooms.length > 0 && 
                 <Tabs renderTabBar={() => <ScrollableTab/>}>
                   {roomList}
                 </Tabs>

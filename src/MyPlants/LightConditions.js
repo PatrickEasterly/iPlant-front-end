@@ -88,7 +88,7 @@ class LightConditions extends React.Component {
           "roomname": this.state.room.roomname,
           "hightemp": this.state.room.hightemp,
           "lowtemp": this.state.room.lowtemp,
-          "lightamount": this.state.selectedLightCondition
+          "lightamount": this.state.selectedLightCondition.name
         }, {
           headers: {
             Authorization: `BEARER ${this.context.loggedIn}`
@@ -169,34 +169,40 @@ class LightConditions extends React.Component {
 
  
   render() {
-    const {navigation} = this.props;
+    const {TopLevelNavigation} = this.props;
     return (
-        <Container>
-        <View style={styles.MainContainer}>
-        <FlatList
-          data={this.state.lightConditions}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={
-                () => this.setState({selectedLightCondition: item}, () => {
-                    // console.log(this.state.selectedLightCondition)
-                    console.log(this.state.room)
-                    this.determineLightCondition()
-                    // navigation.navigate('MyPlants')
-            })
-        } 
-            style={{ flex: 1, flexDirection: 'column', margin: 15, justifyContent: 'center'}}>
-              <Image style={styles.imageThumbnail} source={item.img} />
-                <View style={{alignItems: 'center', marginTop: 10}} >
-                    <Text>{item.name}</Text>
-                </View>
-            </TouchableOpacity>
-          )}
-          //Setting the number of column
-          numColumns={1}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
-        </Container>
+      <AppContext.Consumer>
+        {context => (
+          <Container>
+          <View style={styles.MainContainer}>
+          <FlatList
+            data={this.state.lightConditions}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={
+                  () => this.setState({selectedLightCondition: item}, async () => {
+                      // console.log(this.state.selectedLightCondition)
+                      await this.determineLightCondition()
+                      // navigation.navigate('MyPlants')
+                      context.setShouldUpdate(true)
+                      TopLevelNavigation.navigate({name: 'MyPlants' })
+              })
+          } 
+              style={{ flex: 1, flexDirection: 'column', margin: 15, justifyContent: 'center'}}>
+                <Image style={styles.imageThumbnail} source={item.img} />
+                  <View style={{alignItems: 'center', marginTop: 10}} >
+                      <Text>{item.name}</Text>
+                  </View>
+              </TouchableOpacity>
+            )}
+            //Setting the number of column
+            numColumns={1}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </View>
+          </Container>
+          
+        )}
+      </AppContext.Consumer>
 
         
     );

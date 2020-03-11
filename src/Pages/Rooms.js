@@ -259,15 +259,23 @@ class RoomsScreen1 extends React.Component {
 
 
 
-export default function Rooms () {
+export default function Rooms (props) {
+    const {navigation} = props;
     return(
 
     <NavigationContainer independent={true}>
     <Stack.Navigator headerMode="float" mode="modal">
       <Stack.Screen name={'RoomsScreen1'} component={RoomsScreen1}
       options={{headerShown: false}} />
-      <Stack.Screen name={'LightConditions'} component={LightConditions}  />
-      <Stack.Screen name={'MyPlants'} component={MyPlants}  />
+      <Stack.Screen name={'LightConditions'}>
+            {props => (
+            <LightConditions
+            {...props}
+            TopLevelNavigation={navigation}
+          />
+          )}
+      </Stack.Screen>
+      
     </Stack.Navigator>
   </NavigationContainer>
     )
