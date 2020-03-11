@@ -48,21 +48,14 @@ export default class App extends React.Component {
           </AppContext.Provider>
     )
   }
-  // _login=(/*token*/)=>{
-  //   console.log('set')
-  //   this.setState({
-  //     loggedIn: true,
-  //     token: token
-  //   })
-  // }
 }
 
 function HomeStack() {
   return(
     <NavigationContainer independent={true}>
     <Tabs.Navigator headerMode={'none'}>
-      <Tabs.Screen name="MyPlants" component={MyPlants} />
       <Tabs.Screen name="Calendar" component={Calendar} />
+      <Tabs.Screen name="MyPlants" component={MyPlants} />
       <Tabs.Screen name="Social" component={Social} />
       <Tabs.Screen name="Add" component={Add} />
       <Tabs.Screen name="MyProfile" component={MyProfile} />

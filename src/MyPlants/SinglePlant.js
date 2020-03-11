@@ -16,14 +16,14 @@ import {
   Right
 } from "native-base";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-// import Icon from '@mdi/react'
-// import { mdiWater, mdiFlower, mdiAlert, mdiWeatherSunny, mdiWhiteBalanceSunny, mdiSprout, mdiLeaf,  } from '@mdi/js'
 import { ImageBackground, Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
-import moment from 'moment';
 const Stack = createStackNavigator();
+// import Icon from '@mdi/react'
+// import { mdiWater, mdiFlower, mdiAlert, mdiWeatherSunny, mdiWhiteBalanceSunny, mdiSprout, mdiLeaf,  } from '@mdi/js'
+// import { NavigationContainer } from "@react-navigation/native";
+// import moment from 'moment';
 
 
 const background = require('../../assets/furtherShoppedPlant.png')
@@ -101,7 +101,7 @@ class SinglePlant extends React.Component {
               <Text>Water needs</Text>
             </Left>
             <Right>
-              <Icon name="water-pump" size={30} color="#900" />
+              <Icon name="water-pump" size={30} color="#440" />
             </Right>
             </CardItem>
             <CardItem>
@@ -116,12 +116,28 @@ class SinglePlant extends React.Component {
               <Text>Sunlight</Text>
             </Left>
             <Right>
-              <Icon name="weather-sunny" size={30} color="#440" />
+              <Icon name="white-balance-sunny" size={30} color="#440" />
             </Right>
             </CardItem>
             <CardItem>
               <Left>
                 <Text>{plant.plantInfo.sunlight}</Text>
+              </Left>
+            </CardItem>
+          </Card>
+          <Card>
+            <CardItem>
+            <Left>
+              <Text>Plant type</Text>
+            </Left>
+            <Right>
+              <Icon name="flower-tulip" size={30} color="#440" />
+            </Right>
+            </CardItem>
+            <CardItem>
+              <Left>
+              <Icon name="tree" size={30} color="#440" />
+                <Text>{plant.plantInfo.planttype}</Text>
               </Left>
             </CardItem>
           </Card>
