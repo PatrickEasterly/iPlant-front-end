@@ -74,7 +74,8 @@ class Login extends React.Component{
         const {navigation} = this.props;
         let temp;
         let login = await axios.post("http://833a33e6.ngrok.io/app/user/login", {"username": `${username}`, "password": `${password}`}).then((res)=>{
-          console.log(res)
+        console.log('response with token')  
+        console.log(res)
           this.setState({
             login: true,
             token: res.data.token

@@ -13,7 +13,7 @@ import { AppContext } from '../../Context';
 // const API = 'http://192.168.0.150:5000/api/users/1'; 
 // const background = require('../../assets/bachgrund.png');
 // const API = 'http://192.168.0.119:6000/api/users/2'; 
-const API = 'http://833a33e6.ngrok.io/api/users/2'; 
+const API = 'http://833a33e6.ngrok.io/api/users/3'; 
 const Stack = createStackNavigator();
 
 class PlantsFirstScreen extends React.Component {
@@ -28,6 +28,8 @@ class PlantsFirstScreen extends React.Component {
 
   // get rooms array, plants objects
   componentDidMount() {
+
+    console.log(this.context.loggedIn)
     console.log(this.context)
     axios.get(API)
     .then((res) => {
@@ -45,7 +47,7 @@ class PlantsFirstScreen extends React.Component {
   checkWater(plant) {
     let now = moment();
     let recentWater = moment(plant.waters[plant.waters.length-1].watertime);
-    // console.log(moment(recentWater));
+    console.log(moment(recentWater));
     if (plant.plantInfo.waterneeds.includes("high")){
         if (recentWater > now.subtract(3, 'days')){
             return false;
@@ -71,14 +73,12 @@ class PlantsFirstScreen extends React.Component {
 }
 
   async addWater(plant) {
-    // Run the waterplant post, and then confirm it
     await axios.post(`http://833a33e6.ngrok.io/app/water`, 
     {"plantid": plant.id}, {
       headers: {
         Authorization: `BEARER ${this.context.loggedIn}`
       }
     })
-    // Get the plant, set needsWater to false in state
     let current = {...this.state};
     let changedPlant = current.plants[current.plants.indexOf(plant)]
     changedPlant.needsWater = false;

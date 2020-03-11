@@ -29,7 +29,7 @@ export default class App extends React.Component {
     };
     
     this.state = {
-      loggedIn: 'no',
+      loggedIn: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjMsImlhdCI6MTU4Mzk0MjE2OH0.g3dDPcIxPgudCzFpZOOgqYAXCUrvTo5VUbBYbejqXPs',
       login: this.login
     }
 }
@@ -54,10 +54,9 @@ function HomeStack() {
   return(
     <NavigationContainer independent={true}>
     <Tabs.Navigator headerMode={'none'}>
-     <Tabs.Screen name="Rooms" component={Rooms} />
       <Tabs.Screen name="Calendar" component={Calendar} />
+     <Tabs.Screen name="Rooms" component={Rooms} />
       <Tabs.Screen name="MyPlants" component={MyPlants} />
-      <Tabs.Screen name="Social" component={Social} />
       <Tabs.Screen name="Add" component={Add} />
       <Tabs.Screen name="MyProfile" component={MyProfile} />
     </Tabs.Navigator>

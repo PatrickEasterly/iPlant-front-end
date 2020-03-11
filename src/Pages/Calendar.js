@@ -1,80 +1,141 @@
 import React from 'react';
-import { View, Text, ImageBackground, } from 'react-native';
+import { View, Text, ImageBackground, TouchableOpacity, Alert  } from 'react-native';
 import { CalendarList, Agenda} from 'react-native-calendars';
 import axios from 'axios';
+import moment from 'moment';
 
-const background = require('../../assets/bachgrund.png');
 const API = 'http://833a33e6.ngrok.io/api/users/2'; 
 export default class Calendar extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      items: {
-        '2020-03-11': [{name: 'item 1 - any js object'}],
-        // '2020-03-12': [{name: 'item 2 - any js object', height: 80}],
-        // '2020-03-13': [],
-        // '2020-03-14': [{name: 'item 3 - any js object'}, {name: 'any js object'}]
-      }
+      stuff: {
+      '2020-03-11': [{name: 'item1'}, {name: 'item2'}],
+      },
+      allwaters: {
+      '2020-03-11': [{name: 'item1'}, {name: 'item2'}],
+      '2020-03-12': [{name: 'item3'}, {name: 'item4'}]
+      },
+      rooms: {
+        // rooms
+      },
+      chosenDate: '2020-03-11',
     }
+  }
+
+
+  changeDay=(day)=>{
+    let choice = day.dateString;
+    console.log(choice)
+    let current = this.state.allwaters[choice]
+    console.log(current)
+    let result = {
+      [choice]: current ? [...current] : []
+    }
+    this.setState({
+      chosenDate: choice,
+      stuff: result
+    }, ()=>console.log(this.state))
   }
 
   componentDidMount() {
     axios.get(API)
     .then((res) => {
-      console.log(res.data.plants.waters)
+      // console.log(res.data.plants)
+      let plants = res.data.plants.map((plant)=>plant);
+      console.log(plants)
+      plants = plants.map((plant)=>{
+
+        const result = {
+          id: plant.id,
+          userid: plant.userid,
+          waterneeds: plant.plantInfo.waterneeds,
+          commonname: plant.plantInfo.commonname,
+          // sunlight: plant.plantInfo.sunlight,
+
+          waters: [
+            ...plant.waters
+          ]
+        };
+        return result;
+      })
+      console.log('*********')
+      console.log(plants)
+      let waters = [];
+      plants.map((plant)=>{
+        
+        let name=plant.commonname
+        plant.waters.map((water)=>{
+          
+        })
+      })
+      // console.log(waters)
+      // this.setState({
+      //   items: waters
+      // }/* , ()=>console.log(this.state) */)
     })
   }
+  
+  render() {
+    console.log('rerendering!')
+    console.log(this.state.stuff)
+    return (
+      <Agenda
+        // items={this.state.items}
+        items={this.state.stuff}
+        // loadItemsForMonth={this.loadItems.bind(this)}
+        selected={this.state.chosenDate}
+        renderItem={this.renderItem.bind(this)}
+        renderEmptyData={this.renderEmptyDate.bind(this)}
+        rowHasChanged={this.rowHasChanged.bind(this)}
+        onDayPress={(day)=>this.changeDay(day)}
+        // markingType={'period'}
+        // markedDates={{
+        //    '2017-05-08': {textColor: '#43515c'},
+        //    '2017-05-09': {textColor: '#43515c'},
+        //    '2017-05-14': {startingDay: true, endingDay: true, color: 'blue'},
+        //    '2017-05-21': {startingDay: true, color: 'blue'},
+        //    '2017-05-22': {endingDay: true, color: 'gray'},
+        //    '2017-05-24': {startingDay: true, color: 'gray'},
+        //    '2017-05-25': {color: 'gray'},
+        //    '2017-05-26': {endingDay: true, color: 'gray'}}}
+        // monthFormat={'yyyy'}
+        // theme={{calendarBackground: 'red', agendaKnobColor: 'green'}}
+        //renderDay={(day, item) => (<Text>{day ? day.day: 'item'}</Text>)}
+        // hideExtraDays={false}
+      />
+    );
+  }
 
-    render () {
-        return (
-            <ImageBackground source={background} style={styles.background}>
-            <View style={styles.background}>
-              <Agenda
-              items={this.state.items}
-              loadItemsForMonth={this.loadItems}
 
-              futureScrollRange={12}
-              pastScrollRange={12}
+  renderItem(item) {
+    return (
+      <TouchableOpacity 
+        style={[styles.item, {height: item.height}]} 
+        onPress={() => Alert.alert(item.name)}
+      >
+        <Text>{item.name}</Text>
+      </TouchableOpacity>
+    );
+  }
 
-              renderEmptyDate={()=> {return (
-                <View style={styles.emptyDate}><Text></Text></View>
-              )}}
-              renderItem={(item) => {return (
-                <View style={styles.item}><Text>Something Scheduled</Text></View>
-              );}}
-              />
-            </View>
-            </ImageBackground>   
-        )
-    }
+  renderEmptyDate() {
+    return (
+      <View style={styles.emptyDate}>
+        <Text>This is empty date!</Text>
+      </View>
+    );
+  }
 
-    loadItems=(day)=>{
-      setTimeout(() => {
-        for (let i = -15; i < 85; i++) {
-          const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-          const strTime = this.timeToString(time);
-          if (!this.state.items[strTime]) {
-            this.state.items[strTime] = [];
-            const numItems = Math.floor(Math.random() * 5);
-            for (let j = 0; j < numItems; j++) {
-              this.state.items[strTime].push({
-                name: 'Item for ' + strTime + ' #' + j,
-                height: Math.max(50, Math.floor(Math.random() * 150))
-              });
-            }
-          }
-        }
-        const newItems = {};
-        Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
-        this.setState({
-          items: newItems
-        });
-      }, 1000);
-    }
-    timeToString=(time)=>{
-      const date = new Date(time);
-      return date.toISOString().split('T')[0];
-    }
+  rowHasChanged(r1, r2) {
+    return r1.name !== r2.name;
+  }
+
+  timeToString(time) {
+    const date = new Date(time);
+    return date.toISOString().split('T')[0];
+  }
+
 }
 
 

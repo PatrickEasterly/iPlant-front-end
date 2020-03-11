@@ -44,7 +44,7 @@ import AddPlantConfirmation from "../Pages/AddPlantConfirmation"
 const Stack = createStackNavigator();
 
 // const API = "http://192.168.0.150:5000/api/plantinfo";
-const API = "http://4f65ff2d.ngrok.io/api/plantinfo";
+const API = "http://833a33e6.ngrok.io/api/plantinfo";
 
 class PlantsSearchScreen extends React.Component {
   static renderPlant(plant) {
