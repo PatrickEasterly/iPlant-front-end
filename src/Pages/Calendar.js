@@ -37,7 +37,7 @@ export default class Calendar extends React.Component {
     }, ()=>console.log(this.state))
   }
 
-  componentDidMount() {
+  componentWillMount() {
     axios.get(API)
     .then((res) => {
       
