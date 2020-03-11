@@ -11,7 +11,7 @@ import { AppContext } from '../../Context';
 // import _ from 'lodash';
 
 // const API = 'http://192.168.0.119:6000/api/users/2'; 
-const API = 'http://4f65ff2d.ngrok.io/api/users/2'; 
+const API = 'http://833a33e6.ngrok.io/api/users/2'; 
 const Stack = createStackNavigator();
 
 class PlantsFirstScreen extends React.Component {
@@ -70,7 +70,7 @@ class PlantsFirstScreen extends React.Component {
 
   async addWater(plant) {
     // Run the waterplant post, and then confirm it
-    await axios.post(`http://4f65ff2d.ngrok.io/app/water`, 
+    await axios.post(`http://833a33e6.ngrok.io/app/water`, 
     {"plantid": plant.id}, {
       headers: {
         Authorization: `BEARER ${this.context.loggedIn}`

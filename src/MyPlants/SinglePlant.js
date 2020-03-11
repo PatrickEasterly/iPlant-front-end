@@ -17,7 +17,7 @@ import {
 } from "native-base";
 // import Icon from 'react-native-vector-icons/AntDesign';
 import Icon from '@mdi/react'
-import { mdiWater, mdiFlower, mdiAlert, mdiWeatherSunny, mdiWhiteBalanceSunny, mdiSprout,  } from '@mdi/js'
+import { mdiWater, mdiFlower, mdiAlert, mdiWeatherSunny, mdiWhiteBalanceSunny, mdiSprout, mdiLeaf,  } from '@mdi/js'
 import { ImageBackground, Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { createStackNavigator } from "@react-navigation/stack";
