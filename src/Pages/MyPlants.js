@@ -108,11 +108,15 @@ class PlantsFirstScreen extends React.Component {
       headers: {
         Authorization: `BEARER ${this.context.loggedIn}`
       }
+    }, () => {
+      this.setState({
+
+      })
     })
     // Get the plant, set needsWater to false in state
-    let current = {...this.state};
+    // let current = {...this.state};
     console.log("*************")
-    console.log(current)
+    // console.log(current)
     let changedPlant = current.rooms.plants[current.plants.indexOf(plant)]
     changedPlant.needsWater = false;
     console.log(plants)
@@ -148,9 +152,9 @@ class PlantsFirstScreen extends React.Component {
                 <CardItem bordered style={styles.horizontalContainer}>
                   <Left><Text>{plant.plantInfo.commonname}</Text></Left>
                   {!plant.needsWater ?
-                  <Right><Button warning onPress={()=>{
+                  <Right><Button warning onPress={
                     this.addWater(plant)
-                  }}>
+                  }>
                   <Text>😩💧</Text></Button></Right> :
                   <Right><Button  success><Text>😊✔️</Text></Button></Right>}
                 </CardItem>
