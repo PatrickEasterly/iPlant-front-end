@@ -23,10 +23,10 @@ const Stack = createStackNavigator();
 import axios from "axios";
 import { ScrollView } from "react-native-gesture-handler";
 import { AppContext } from '../../Context';
-const API = "http://192.168.1.132:5000/api/rooms/user/1";
-const API2 = 'http://192.168.1.132:5000/app/plant'
+const API = "http://192.168.0.150:5000/api/rooms/user/1";
+const API2 = 'http://192.168.0.150:5000/app/plant'
 
-export default class AddPlantsRoom extends React.Component {
+class AddPlantToRoom extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,6 +39,8 @@ export default class AddPlantsRoom extends React.Component {
     };
     this.getRoom = this.getRoom.bind(this);
   }
+
+
 
   componentDidMount() {
     this.getRoom();
@@ -58,77 +60,31 @@ export default class AddPlantsRoom extends React.Component {
   }
 
   addPlantToRoom(){
-    axios.post(`${API2}`, {
-        userid: 1,
-        roomid: this.state.currentRoomId,
-        plantinfoid: this.state.plant.id,
-        plantname: this.state.plant.commonname
+    const { navigation } = this.props;
+    axios.post(API2 , {
+        "userid": 1,
+        "roomid": this.state.currentRoomId,
+        "plantinfoid": this.state.plant.id,
+        "plantname": this.state.plant.commonname
     }, {
         headers: {
           Authorization: `BEARER ${this.context.loggedIn}`
         }
+  }, () => {
+    navigation.navigate("AddPlantConfirmation")
   })
   console.log('inserted')
+  console.log(this.state.currentRoomId)
+  console.log(this.state.plant.id)
+  console.log(this.state.plant.commonname)
+ 
+ 
 }
 
 
-  renderRooms() {
-    {
-      this.state.rooms.map(room => {
-        return (
-          <ListItem
-            thumbnail
-            style={{ margin: 6, marginLeft: 0, paddingLeft: 0 }}
-            onPress={() =>
-              this.setState({currentRoomId: room.roomid}, () => {
-                  this.addPlantToRoom()
-              })
-            
-            }
-          >
-            <Left style={{ marginLeft: 0, paddingLeft: 0 }}>
-              <Thumbnail
-                style={{
-                  marginLeft: 0,
-                  paddingLeft: 0,
-                  borderRadius: 5,
-                  height: 70,
-                  width: 70,
-
-                  shadowColor: "#0000",
-                  shadowOffset: { width: 0, height: 1 },
-                  shadowOpacity: 0.8,
-                  shadowRadius: 50
-                }}
-                square
-                // source={{ uri: plant.photo }}
-              />
-            </Left>
-            <Body>
-              <Text style={{ padding: 2, textTransform: "capitalize" }}>
-                {room.roomname}
-              </Text>
-              <Text
-                style={{ padding: 3, textTransform: "capitalize" }}
-                note
-                numberOfLines={1}
-              >
-                {/* {plant.latinname} */}
-              </Text>
-            </Body>
-            <Right>
-              <Button transparent>
-                <Icon name="arrow-forward" />
-              </Button>
-            </Right>
-          </ListItem>
-        );
-      });
-    }
-  }
-
   render() {
     let plant = this.state.plant;
+    
     return (
     
         <Content>
@@ -152,8 +108,9 @@ export default class AddPlantsRoom extends React.Component {
                   thumbnail
                   style={{ margin: 6, marginLeft: 0, paddingLeft: 0 }}
                   onPress={() =>
-                    this.setState({currentRoomId: room.roomid}, () => {
+                    this.setState({currentRoomId: room.id}, () => {
                         this.addPlantToRoom()
+                        
                     })
                   
                   }
@@ -202,6 +159,9 @@ export default class AddPlantsRoom extends React.Component {
     );
   }
 }
+AddPlantToRoom.contextType = AppContext;
+
+export default AddPlantToRoom;
 
 const styles = {
   hiddenCard: {

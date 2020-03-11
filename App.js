@@ -1,5 +1,5 @@
 import MyPlants from './src/Pages/MyPlants';
-import Social from './src/Pages/Social';
+import Rooms from './src/Pages/Rooms';
 import MyProfile from './src/Pages/MyProfile';
 import Add from './src/Pages/Add';
 import Calendar from './src/Pages/Calendar';
@@ -19,7 +19,7 @@ export default class App extends React.Component {
         <Tabs.Navigator headerMode={'none'}>
           <Tabs.Screen name="MyPlants" component={MyPlants} />
           <Tabs.Screen name="Calendar" component={Calendar} />
-          <Tabs.Screen name="Social" component={Social} />
+          <Tabs.Screen name="Rooms" component={Rooms} />
           <Tabs.Screen name="Add" component={Add} />
           <Tabs.Screen name="MyProfile" component={MyProfile} />
         </Tabs.Navigator>
