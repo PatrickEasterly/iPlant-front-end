@@ -10,11 +10,14 @@ import {
   Header,
   Content,
   Thumbnail,
-  Icon,
+  // Icon,
   Left,
   Body,
   Right
 } from "native-base";
+// import Icon from 'react-native-vector-icons/AntDesign';
+import Icon from '@mdi/react'
+import { mdiWater, mdiFlower, mdiAlert, mdiWeatherSunny, mdiWhiteBalanceSunny, mdiSprout,  } from '@mdi/js'
 import { ImageBackground, Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -42,26 +45,51 @@ class SinglePlant extends React.Component {
     if (this.state.activePage === 1) {
       if(plant.needsWater) {
         return (
-          <Card>
+          <Card key="key1">
             <CardItem bordered>
+              <Left>
               <Text>Needs water</Text>
-              <Text>{plant.plantInfo.commonname}</Text>
+              </Left>
+              <Right>
+              <Text><Icon 
+              path={mdiAlert}
+              title="water"
+              size={1}
+              color="green"
+              /></Text>
+              </Right>
+              {/* <Text>{plant.plantInfo.commonname}</Text> */}
+            </CardItem>
+            <CardItem bordered>
+              <Text>Your {plant.plantInfo.commonname} needs water.</Text>
             </CardItem>
           </Card>
         );
       }
       return (
-        <Card>
+        <Card  key="key2">
           <CardItem bordered>
-            <Text>All good</Text>
-            <Text>{plant.plantInfo.commonname}</Text>
+            <Left>
+            <Text>Up to date</Text>
+            </Left>
+            <Right>
+              <Text><Icon 
+              path={mdiFlower}
+              title="water"
+              size={1}
+              color="green"
+              /></Text>
+            </Right>
+          </CardItem>
+          <CardItem bordered>
+            <Text>Your {plant.plantInfo.commonname} has water and is doing great!</Text>
           </CardItem>
         </Card>
       );
     }
     if (this.state.activePage === 2) {
       return (
-        <View>
+        <View  key="key3">
           <Text>Care History</Text>
           <Card>
             {/* Currently returns 'You watered on: 2020-01-08', lets make it prettier */}
@@ -77,7 +105,25 @@ class SinglePlant extends React.Component {
         </View>
       )
     } else {
-      return <Text>Tab for other stuff</Text>;
+      return (
+        <View>
+          <Card>
+            <CardItem>
+            <Left>
+            <Text>Water Needs</Text>
+            </Left>
+            <Right>
+              <Text><Icon 
+              path={mdiWater}
+              title="water"
+              size={1}
+              color="green"
+              /></Text>
+            </Right>
+            </CardItem>
+          </Card>
+        </View>
+      )
     }
   };
   render() {
@@ -114,7 +160,7 @@ class SinglePlant extends React.Component {
               />
             </CardItem>
             {/* <CardItem> */}
-            <Button
+            {/* <Button
               onPress={() => navigation.navigate("AddPlantToRoom")}
               style={{
                 justifyContent: "center",
@@ -124,7 +170,7 @@ class SinglePlant extends React.Component {
               }}
             >
               <Text>Add Plant</Text>
-            </Button>
+            </Button> */}
             <View>
               <Segment style={{ marginTop: 2, height: 60 }}>
                 <Button
@@ -133,7 +179,7 @@ class SinglePlant extends React.Component {
                   active={this.state.activePage === 1}
                   onPress={this.selectComponent(1)}
                 >
-                  <Text style={styles.text}>Info</Text>
+                  <Text style={styles.text}>Status</Text>
                 </Button>
 
                 <Button
@@ -150,7 +196,7 @@ class SinglePlant extends React.Component {
                   style={styles.button}
                   last
                 >
-                  <Text style={styles.text}>Other</Text>
+                  <Text style={styles.text}>About</Text>
                 </Button>
               </Segment>
             </View>

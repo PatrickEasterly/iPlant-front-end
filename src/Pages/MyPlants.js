@@ -70,15 +70,13 @@ class PlantsFirstScreen extends React.Component {
 
   async addWater(plant) {
     // Run the waterplant post, and then confirm it
-    // alert(`${plant.id}`)
-    // alert(`${this.context.loggedIn}`)
-    await axios.post(`http://4f65ff2d.ngrok.io/app/water`, {"plantid": plant.id}, {
+    await axios.post(`http://4f65ff2d.ngrok.io/app/water`, 
+    {"plantid": plant.id}, {
       headers: {
         Authorization: `BEARER ${this.context.loggedIn}`
       }
     })
     // Get the plant, set needsWater to false in state
-
     let current = {...this.state};
     let changedPlant = current.plants[current.plants.indexOf(plant)]
     changedPlant.needsWater = false;
@@ -102,7 +100,9 @@ class PlantsFirstScreen extends React.Component {
       // Once the plants are filtered, make clickable elements for them
       plants = plants.map((plant)=>{
         return (
-          <TouchableOpacity onPress={()=>navigation.navigate('SinglePlant', {plant: plant})}>
+          <TouchableOpacity 
+          key={plant.id} 
+          onPress={()=>navigation.navigate('SinglePlant', {plant: plant})}>
             <Card>
               <CardItem bordered style={styles.horizontalContainer}>
                 <Left><Text>{plant.plantInfo.commonname}</Text></Left>
