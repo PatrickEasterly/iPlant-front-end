@@ -10,6 +10,8 @@ import moment from 'moment';
 import { AppContext } from '../../Context';
 // import _ from 'lodash';
 
+// const API = 'http://192.168.0.150:5000/api/users/1'; 
+// const background = require('../../assets/bachgrund.png');
 // const API = 'http://192.168.0.119:6000/api/users/2'; 
 const API = 'http://833a33e6.ngrok.io/api/users/2'; 
 const Stack = createStackNavigator();

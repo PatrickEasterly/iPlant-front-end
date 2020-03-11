@@ -85,7 +85,7 @@ class SinglePlantSearch extends React.Component {
             </CardItem>
             {/* <CardItem> */}
             <Button
-              onPress={() => navigation.navigate("AddPlantToRoom")}
+              onPress={() => navigation.navigate("AddPlantToRoom", {plant: plant})}
               style={{
                 justifyContent: "center",
                 backgroundColor: "green",

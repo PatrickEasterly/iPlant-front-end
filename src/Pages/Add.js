@@ -1,6 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+// import { AppContext } from '../../Context';
+
 import Autocomplete from "native-base-autocomplete"; /* eslint-disable-line import/no-unresolved */
 import {
   ImageBackground,
@@ -37,9 +39,11 @@ import {
   ActionSheet
 } from "native-base";
 import AddPlantToRoom from "../Pages/AddPlantToRoom";
+import AddPlantConfirmation from "../Pages/AddPlantConfirmation"
 
 const Stack = createStackNavigator();
 
+// const API = "http://192.168.0.150:5000/api/plantinfo";
 const API = "http://4f65ff2d.ngrok.io/api/plantinfo";
 
 class PlantsSearchScreen extends React.Component {
@@ -113,7 +117,7 @@ class PlantsSearchScreen extends React.Component {
                     <ListItem
                       thumbnail
                       style={{ margin: 6, marginLeft: 0, paddingLeft: 0 }}
-                      onPress={() =>
+                      onPress={() => 
                         navigation.navigate("SinglePlantSearch", {
                           plant: plant
                         })
@@ -171,6 +175,10 @@ class PlantsSearchScreen extends React.Component {
   }
 }
 
+// AddPlantToRoom.contextType = AppContext;
+
+
+
 export default function MyPlants() {
   return (
     <NavigationContainer independent={true}>
@@ -185,6 +193,7 @@ export default function MyPlants() {
           component={SinglePlantSearch}
         />
         <Stack.Screen name={"AddPlantToRoom"} component={AddPlantToRoom} />
+        <Stack.Screen name={"AddPlantConfirmation"} component={AddPlantConfirmation}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
