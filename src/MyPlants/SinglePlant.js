@@ -10,16 +10,20 @@ import {
   Header,
   Content,
   Thumbnail,
-  Icon,
+  // Icon,
   Left,
   Body,
   Right
 } from "native-base";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ImageBackground, Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
 const Stack = createStackNavigator();
+// import Icon from '@mdi/react'
+// import { mdiWater, mdiFlower, mdiAlert, mdiWeatherSunny, mdiWhiteBalanceSunny, mdiSprout, mdiLeaf,  } from '@mdi/js'
+// import { NavigationContainer } from "@react-navigation/native";
+// import moment from 'moment';
 
 
 const background = require('../../assets/furtherShoppedPlant.png')
@@ -39,26 +43,116 @@ class SinglePlant extends React.Component {
   _renderComponent = () => {
     let plant = this.state.plant;
     if (this.state.activePage === 1) {
+      if(plant.needsWater) {
+        return (
+          <Card key="key1">
+            <CardItem bordered>
+              <Left>
+              <Text>Needs water</Text>
+              </Left>
+              <Right>
+              <Icon name="leaf" size={30} color="#900" />
+              </Right>
+            </CardItem>
+            <CardItem bordered>
+              <Text>Your {plant.plantInfo.commonname} needs water.</Text>
+            </CardItem>
+          </Card>
+        );
+      }
       return (
-        <Card>
+        <Card  key="key2">
           <CardItem bordered>
-            <Text>{plant.plantInfo.commonname}</Text>
+            <Left>
+            <Text>Up to date</Text>
+            </Left>
+            <Right>
+              <Icon name="flower" size={30} color="#900" />
+            </Right>
+          </CardItem>
+          <CardItem bordered>
+            <Text>Your {plant.plantInfo.commonname} has water and is doing great!</Text>
           </CardItem>
         </Card>
       );
     }
     if (this.state.activePage === 2) {
-      return <Text>History Tab</Text>;
+      return (
+        <View  key="key3">
+          <Text>Care History</Text>
+          <Card>
+            {plant.waters.map((water)=>{
+              let wawa = water.watertime.split('').slice(0, water.watertime.indexOf('T')).join('') //["2", "0", "2", "0", "-", "0", "1", "-", "0", "8"]
+              return (
+                <CardItem bordered>
+                  <Text>You watered on: {wawa}</Text>
+                </CardItem>
+              )
+            })}
+          </Card>
+        </View>
+      )
     } else {
-      return <Text>Tab for other stuff</Text>;
+      return (
+        <View>
+          <Card>
+            <CardItem>
+            <Left>
+              <Text>Water needs</Text>
+            </Left>
+            <Right>
+              <Icon name="water-pump" size={30} color="#440" />
+            </Right>
+            </CardItem>
+            <CardItem>
+              <Left>
+                <Text>{plant.plantInfo.waterneeds}</Text>
+              </Left>
+            </CardItem>
+          </Card>
+          <Card>
+            <CardItem>
+            <Left>
+              <Text>Sunlight</Text>
+            </Left>
+            <Right>
+              <Icon name="white-balance-sunny" size={30} color="#440" />
+            </Right>
+            </CardItem>
+            <CardItem>
+              <Left>
+                <Text>{plant.plantInfo.sunlight}</Text>
+              </Left>
+            </CardItem>
+          </Card>
+          <Card>
+            <CardItem>
+            <Left>
+              <Text>Plant type</Text>
+            </Left>
+            <Right>
+              <Icon name="flower-tulip" size={30} color="#440" />
+            </Right>
+            </CardItem>
+            <CardItem>
+              <Left>
+              <Icon name="tree" size={30} color="#440" />
+                <Text>{plant.plantInfo.planttype}</Text>
+              </Left>
+            </CardItem>
+          </Card>
+        </View>
+      )
     }
   };
   render() {
     let plant = this.state.plant;
     const { navigation } = this.props;
+    console.log(plant.needsWater)
+    const isThirsty = plant.needsWater ? '#f0f' : '#0f0';
     return (
       <Container>
-        <Content>
+        <Content style={{backgroundColor: isThirsty}}>
           <Card>
             <CardItem>
               <Left style={{ height: 70 }}>
@@ -84,18 +178,6 @@ class SinglePlant extends React.Component {
                 style={{ height: 240, width: null, flex: 1 }}
               />
             </CardItem>
-            {/* <CardItem> */}
-            <Button
-              onPress={() => navigation.navigate("AddPlantToRoom")}
-              style={{
-                justifyContent: "center",
-                backgroundColor: "green",
-                margin: 10,
-                borderRadius: 30
-              }}
-            >
-              <Text>Add Plant</Text>
-            </Button>
             <View>
               <Segment style={{ marginTop: 2, height: 60 }}>
                 <Button
@@ -104,7 +186,7 @@ class SinglePlant extends React.Component {
                   active={this.state.activePage === 1}
                   onPress={this.selectComponent(1)}
                 >
-                  <Text style={styles.text}>Info</Text>
+                  <Text style={styles.text}>Status</Text>
                 </Button>
 
                 <Button
@@ -121,7 +203,7 @@ class SinglePlant extends React.Component {
                   style={styles.button}
                   last
                 >
-                  <Text style={styles.text}>Other</Text>
+                  <Text style={styles.text}>About</Text>
                 </Button>
               </Segment>
             </View>

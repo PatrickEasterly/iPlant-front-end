@@ -11,7 +11,7 @@ import { AppContext } from '../../Context';
 // import _ from 'lodash';
 
 // const API = 'http://192.168.0.119:6000/api/users/2'; 
-const API = 'http://76bebe00.ngrok.io/api/users/2'; 
+const API = 'http://833a33e6.ngrok.io/api/users/2'; 
 const Stack = createStackNavigator();
 
 class PlantsFirstScreen extends React.Component {
@@ -43,7 +43,7 @@ class PlantsFirstScreen extends React.Component {
   checkWater(plant) {
     let now = moment();
     let recentWater = moment(plant.waters[plant.waters.length-1].watertime);
-    console.log(moment(recentWater));
+    // console.log(moment(recentWater));
     if (plant.plantInfo.waterneeds.includes("high")){
         if (recentWater > now.subtract(3, 'days')){
             return false;
@@ -70,15 +70,13 @@ class PlantsFirstScreen extends React.Component {
 
   async addWater(plant) {
     // Run the waterplant post, and then confirm it
-    alert(`${plant.id}`)
-    alert(`${this.context.loggedIn}`)
-    await axios.post('http://76bebe00.ngrok.io/app/water', {"plantid": plant.id}, {
+    await axios.post(`http://833a33e6.ngrok.io/app/water`, 
+    {"plantid": plant.id}, {
       headers: {
         Authorization: `BEARER ${this.context.loggedIn}`
       }
     })
     // Get the plant, set needsWater to false in state
-
     let current = {...this.state};
     let changedPlant = current.plants[current.plants.indexOf(plant)]
     changedPlant.needsWater = false;
@@ -102,7 +100,9 @@ class PlantsFirstScreen extends React.Component {
       // Once the plants are filtered, make clickable elements for them
       plants = plants.map((plant)=>{
         return (
-          <TouchableOpacity onPress={()=>navigation.navigate('SinglePlant', {plant: plant})}>
+          <TouchableOpacity 
+          key={plant.id} 
+          onPress={()=>navigation.navigate('SinglePlant', {plant: plant})}>
             <Card>
               <CardItem bordered style={styles.horizontalContainer}>
                 <Left><Text>{plant.plantInfo.commonname}</Text></Left>
