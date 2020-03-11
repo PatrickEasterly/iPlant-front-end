@@ -2,7 +2,7 @@ import MyPlants from './src/Pages/MyPlants';
 import Social from './src/Pages/Social';
 import MyProfile from './src/Pages/MyProfile';
 import Add from './src/Pages/Add';
-import OurCalendar from './src/Pages/Calendar';
+import Calendar from './src/Pages/Calendar';
 import Login from './src/Intros/Login';
 
 import 'react-native-gesture-handler';
@@ -54,7 +54,7 @@ function HomeStack() {
   return(
     <NavigationContainer independent={true}>
     <Tabs.Navigator headerMode={'none'}>
-      <Tabs.Screen name="Calendar" component={OurCalendar} />
+      <Tabs.Screen name="Calendar" component={Calendar} />
       <Tabs.Screen name="MyPlants" component={MyPlants} />
       <Tabs.Screen name="Social" component={Social} />
       <Tabs.Screen name="Add" component={Add} />

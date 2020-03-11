@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text, ImageBackground, } from 'react-native';
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import { CalendarList, Agenda} from 'react-native-calendars';
 import axios from 'axios';
 
 const background = require('../../assets/bachgrund.png');
 const API = 'http://833a33e6.ngrok.io/api/users/2'; 
-export default class OurCalendar extends React.Component {
+export default class Calendar extends React.Component {
   constructor(props){
     super(props);
     this.state = {
