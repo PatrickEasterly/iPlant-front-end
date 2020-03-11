@@ -42,9 +42,10 @@ import {
   ActionSheet
 } from "native-base";
 const office = require('../../assets/rooms/office.jpg')
-const API = "http://192.168.0.150:5000/app/room";
+const API = "http://192.168.0.150:5000/app/room/";
 const Stack = createStackNavigator();
 const dark = require('../../assets/lightConditions/dark.jpg')
+import { AppContext } from "../../Context";
 
 class LightConditions extends React.Component {
     constructor(props) {
@@ -59,6 +60,10 @@ class LightConditions extends React.Component {
             {name: 'Full sun', img:'' }
         ]
       }
+    }
+
+    componentDidMount() {
+      console.log(this.props.route)
     }
 
     determineLightCondition() {
@@ -77,26 +82,34 @@ class LightConditions extends React.Component {
     }
     
     addDarkRoom() {
-            axios.post(API, {
-                "userid": 1,
-                "roomimg": this.state.room.roomimg,
-                "roomname": this.state.room.roomname,
-                "hightemp": this.state.room.hightemp,
-                "lowtemp": this.state.room.lowtemp,
-                "lightamount": this.state.selectedLightCondition
-            }, () => {
-                console.log('Dark Room added')
-                console.log(this.state.selectedLightCondition)
-            })
-           
-        
+        axios.post(API,
+        {
+          "roomimg": this.state.room.roomimg,
+          "roomname": this.state.room.roomname,
+          "hightemp": this.state.room.hightemp,
+          "lowtemp": this.state.room.lowtemp,
+          "lightamount": this.state.selectedLightCondition
+        }, {
+          headers: {
+            Authorization: `BEARER ${this.context.loggedIn}`
+          }
+        })
+        console.log('Dark Room added')
+        console.log(this.state.selectedLightCondition)
     }
+        
+    
 
     addShadeRoom() {
         this.setState({
             selectedLightCondition: 'Dark'
         }, () => {
             axios.post(API, {
+              headers: {
+                Authorization: `BEARER ${this.context.loggedIn}`
+              }
+            },
+              {
                 "userid": 1,
                 "roomimg": this.state.room.roomimg,
                 "roomname": this.state.room.roomname,
@@ -114,6 +127,11 @@ class LightConditions extends React.Component {
             selectedLightCondition: 'Dark'
         }, () => {
             axios.post(API, {
+              headers: {
+                Authorization: `BEARER ${this.context.loggedIn}`
+              }
+            },
+            {
                 "userid": 1,
                 "roomimg": this.state.room.roomimg,
                 "roomname": this.state.room.roomname,
@@ -131,6 +149,11 @@ class LightConditions extends React.Component {
             selectedLightCondition: 'Dark'
         }, () => {
             axios.post(API, {
+              headers: {
+                Authorization: `BEARER ${this.context.loggedIn}`
+              }
+            },
+            {
                 "userid": 1,
                 "roomimg": this.state.room.roomimg,
                 "roomname": this.state.room.roomname,
@@ -156,6 +179,7 @@ class LightConditions extends React.Component {
             <TouchableOpacity onPress={
                 () => this.setState({selectedLightCondition: item}, () => {
                     // console.log(this.state.selectedLightCondition)
+                    console.log(this.state.room)
                     this.determineLightCondition()
                     // navigation.navigate('MyPlants')
             })
@@ -180,6 +204,7 @@ class LightConditions extends React.Component {
 
 }
 
+LightConditions.contextType = AppContext;
 
 
 export default LightConditions

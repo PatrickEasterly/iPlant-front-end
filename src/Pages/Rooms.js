@@ -52,9 +52,7 @@ class RoomsScreen1 extends React.Component {
         super(props);
         this.state = {
          dataSource: {},
-         room: {
-        
-        },
+         room: {},
         currentRoom: '',
         rooms: [
             {name: 'Office', img: office},
@@ -101,6 +99,7 @@ class RoomsScreen1 extends React.Component {
     }
     
     addOffice() {
+        const {navigation} = this.props;
         this.setState({
             room: {
                 roomname: 'Office',
@@ -111,6 +110,8 @@ class RoomsScreen1 extends React.Component {
         }, () => {
             console.log('office added')
             console.log(this.state.room)
+            navigation.navigate('LightConditions', {room: this.state.room})
+
         })
         
     }
@@ -233,7 +234,7 @@ class RoomsScreen1 extends React.Component {
             <TouchableOpacity onPress={
                 () => this.setState({currentRoom: item}, () => {
                 this.determineRoom()
-                navigation.navigate('LightConditions', {room: this.state.room})
+                // navigation.navigate('LightConditions', {room: this.state.room})
             })
         } 
             style={{ flex: 1, flexDirection: 'column', margin: 15, justifyContent: 'center'}}>
