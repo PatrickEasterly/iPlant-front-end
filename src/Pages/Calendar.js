@@ -4,7 +4,7 @@ import { CalendarList, Agenda} from 'react-native-calendars';
 import axios from 'axios';
 import moment from 'moment';
 
-const API = 'http://833a33e6.ngrok.io/api/users/2'; 
+const API = 'http://bcf5c561.ngrok.io/api/users/2'; 
 export default class Calendar extends React.Component {
   constructor(props){
     super(props);
@@ -23,7 +23,6 @@ export default class Calendar extends React.Component {
     }
   }
 
-
   changeDay=(day)=>{
     let choice = day.dateString;
     console.log(choice)
@@ -41,44 +40,56 @@ export default class Calendar extends React.Component {
   componentDidMount() {
     axios.get(API)
     .then((res) => {
-      // console.log(res.data.plants)
+      
       let plants = res.data.plants.map((plant)=>plant);
       console.log(plants)
       plants = plants.map((plant)=>{
-
         const result = {
           id: plant.id,
           userid: plant.userid,
           waterneeds: plant.plantInfo.waterneeds,
           commonname: plant.plantInfo.commonname,
-          // sunlight: plant.plantInfo.sunlight,
-
           waters: [
             ...plant.waters
           ]
         };
         return result;
       })
-      console.log('*********')
-      console.log(plants)
-      let waters = [];
+
+
+      // let waters = [];
+      let finalWater = {};
       plants.map((plant)=>{
-        
-        let name=plant.commonname
+        let plantname=plant.commonname
+
+
         plant.waters.map((water)=>{
           
+          let stringy = `You watered your ${plantname}`;
+          let time = [water.watertime.split('T')[0]];
+          let result = {name: stringy};
+          // waters.push({
+          //  [time] : result
+          // })
+          if(!finalWater[time]){
+            finalWater[time] = [];
+          }
+          finalWater[time].push(result)
         })
       })
-      // console.log(waters)
-      // this.setState({
-      //   items: waters
-      // }/* , ()=>console.log(this.state) */)
+      
+      console.table(this.state.allwaters)
+      console.table(finalWater)
+      this.setState({
+        allwaters: finalWater
+      })
     })
+    // At this point in the night, this is what my brain returns. Delete this comment when you clean it up. 
   }
   
   render() {
-    console.log('rerendering!')
-    console.log(this.state.stuff)
+    // console.log('rerendering!')
+    // console.log(this.state.stuff)
     return (
       <Agenda
         // items={this.state.items}
@@ -106,6 +117,7 @@ export default class Calendar extends React.Component {
       />
     );
   }
+
 
 
   renderItem(item) {
