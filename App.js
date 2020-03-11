@@ -3,29 +3,66 @@ import Rooms from './src/Pages/Rooms';
 import MyProfile from './src/Pages/MyProfile';
 import Add from './src/Pages/Add';
 import Calendar from './src/Pages/Calendar';
+import Login from './src/Intros/Login';
 
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const Tabs = createBottomTabNavigator();
+const Stack = createStackNavigator();
+////////////////////////////////////////////////////////
+import {AppContext} from './Context';
 
 export default class App extends React.Component {
+  constructor(props){
+    super(props);
 
+    this.login = (yeet) => {
+      // debugger;
+      console.log(yeet)
+      this.setState(state=>({
+        loggedIn: yeet,
+      }), ()=>console.log(this.state.loggedIn, "===================="));
+    };
+    
+    this.state = {
+      loggedIn: 'no',
+      login: this.login
+    }
+}
   render() {
+    // console.log('--------------------')
+    console.log(this.state)
     return (
-      <NavigationContainer>
-        <Tabs.Navigator headerMode={'none'}>
-          <Tabs.Screen name="MyPlants" component={MyPlants} />
-          <Tabs.Screen name="Calendar" component={Calendar} />
-          <Tabs.Screen name="Rooms" component={Rooms} />
-          <Tabs.Screen name="Add" component={Add} />
-          <Tabs.Screen name="MyProfile" component={MyProfile} />
-        </Tabs.Navigator>
-      </NavigationContainer>
+          <AppContext.Provider value={this.state}>
+            <NavigationContainer>
+              <Stack.Navigator headerMode={'none'}>
+                {/* <Stack.Screen name="Login" component={Login}>
+              </Stack.Screen> */}
+              <Stack.Screen name="HomeStack" component={HomeStack} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </AppContext.Provider>
     )
   }
+}
+
+function HomeStack() {
+  return(
+    <NavigationContainer independent={true}>
+    <Tabs.Navigator headerMode={'none'}>
+     <Tabs.Screen name="Rooms" component={Rooms} />
+      <Tabs.Screen name="Calendar" component={Calendar} />
+      <Tabs.Screen name="MyPlants" component={MyPlants} />
+      <Tabs.Screen name="Social" component={Social} />
+      <Tabs.Screen name="Add" component={Add} />
+      <Tabs.Screen name="MyProfile" component={MyProfile} />
+    </Tabs.Navigator>
+  </NavigationContainer>
+  )
 }
 
 
