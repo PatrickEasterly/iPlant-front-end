@@ -15,9 +15,9 @@ import {
   Body,
   Right
 } from "native-base";
-// import Icon from 'react-native-vector-icons/AntDesign';
-import Icon from '@mdi/react'
-import { mdiWater, mdiFlower, mdiAlert, mdiWeatherSunny, mdiWhiteBalanceSunny, mdiSprout, mdiLeaf,  } from '@mdi/js'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+// import Icon from '@mdi/react'
+// import { mdiWater, mdiFlower, mdiAlert, mdiWeatherSunny, mdiWhiteBalanceSunny, mdiSprout, mdiLeaf,  } from '@mdi/js'
 import { ImageBackground, Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -51,14 +51,8 @@ class SinglePlant extends React.Component {
               <Text>Needs water</Text>
               </Left>
               <Right>
-              <Text><Icon 
-              path={mdiAlert}
-              title="water"
-              size={1}
-              color="green"
-              /></Text>
+              <Icon name="leaf" size={30} color="#900" />
               </Right>
-              {/* <Text>{plant.plantInfo.commonname}</Text> */}
             </CardItem>
             <CardItem bordered>
               <Text>Your {plant.plantInfo.commonname} needs water.</Text>
@@ -73,12 +67,7 @@ class SinglePlant extends React.Component {
             <Text>Up to date</Text>
             </Left>
             <Right>
-              <Text><Icon 
-              path={mdiFlower}
-              title="water"
-              size={1}
-              color="green"
-              /></Text>
+              <Icon name="flower" size={30} color="#900" />
             </Right>
           </CardItem>
           <CardItem bordered>
@@ -92,7 +81,6 @@ class SinglePlant extends React.Component {
         <View  key="key3">
           <Text>Care History</Text>
           <Card>
-            {/* Currently returns 'You watered on: 2020-01-08', lets make it prettier */}
             {plant.waters.map((water)=>{
               let wawa = water.watertime.split('').slice(0, water.watertime.indexOf('T')).join('') //["2", "0", "2", "0", "-", "0", "1", "-", "0", "8"]
               return (
@@ -110,16 +98,31 @@ class SinglePlant extends React.Component {
           <Card>
             <CardItem>
             <Left>
-            <Text>Water Needs</Text>
+              <Text>Water needs</Text>
             </Left>
             <Right>
-              <Text><Icon 
-              path={mdiWater}
-              title="water"
-              size={1}
-              color="green"
-              /></Text>
+              <Icon name="water-pump" size={30} color="#900" />
             </Right>
+            </CardItem>
+            <CardItem>
+              <Left>
+                <Text>{plant.plantInfo.waterneeds}</Text>
+              </Left>
+            </CardItem>
+          </Card>
+          <Card>
+            <CardItem>
+            <Left>
+              <Text>Sunlight</Text>
+            </Left>
+            <Right>
+              <Icon name="weather-sunny" size={30} color="#440" />
+            </Right>
+            </CardItem>
+            <CardItem>
+              <Left>
+                <Text>{plant.plantInfo.sunlight}</Text>
+              </Left>
             </CardItem>
           </Card>
         </View>
@@ -159,18 +162,6 @@ class SinglePlant extends React.Component {
                 style={{ height: 240, width: null, flex: 1 }}
               />
             </CardItem>
-            {/* <CardItem> */}
-            {/* <Button
-              onPress={() => navigation.navigate("AddPlantToRoom")}
-              style={{
-                justifyContent: "center",
-                backgroundColor: "green",
-                margin: 10,
-                borderRadius: 30
-              }}
-            >
-              <Text>Add Plant</Text>
-            </Button> */}
             <View>
               <Segment style={{ marginTop: 2, height: 60 }}>
                 <Button

@@ -40,8 +40,8 @@ export default class App extends React.Component {
           <AppContext.Provider value={this.state}>
             <NavigationContainer>
               <Stack.Navigator headerMode={'none'}>
-                <Stack.Screen name="Login" component={Login}>
-              </Stack.Screen>
+                {/* <Stack.Screen name="Login" component={Login}>
+              </Stack.Screen> */}
               <Stack.Screen name="HomeStack" component={HomeStack} />
               </Stack.Navigator>
             </NavigationContainer>
