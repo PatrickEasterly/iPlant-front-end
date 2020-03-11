@@ -40,11 +40,12 @@ import {
 } from "native-base";
 import AddPlantToRoom from "../Pages/AddPlantToRoom";
 import AddPlantConfirmation from "../Pages/AddPlantConfirmation"
+import MyPlants from "../Pages/MyPlants"
 
 const Stack = createStackNavigator();
 
-// const API = "http://192.168.0.150:5000/api/plantinfo";
-const API = "http://4f65ff2d.ngrok.io/api/plantinfo";
+const API = "http://192.168.0.150:5000/api/plantinfo";
+// const API = "http://4f65ff2d.ngrok.io/api/plantinfo";
 
 class PlantsSearchScreen extends React.Component {
   static renderPlant(plant) {
@@ -177,9 +178,9 @@ class PlantsSearchScreen extends React.Component {
 
 // AddPlantToRoom.contextType = AppContext;
 
+export default function SearchPlants(props) {
+  const {navigation} = props;
 
-
-export default function MyPlants() {
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator headerMode="float" mode="modal">
@@ -192,8 +193,15 @@ export default function MyPlants() {
           name={"SinglePlantSearch"}
           component={SinglePlantSearch}
         />
-        <Stack.Screen name={"AddPlantToRoom"} component={AddPlantToRoom} />
-        <Stack.Screen name={"AddPlantConfirmation"} component={AddPlantConfirmation}/>
+        <Stack.Screen name={"AddPlantToRoom"} >
+          {props => (
+            <AddPlantToRoom
+            {...props}
+            TopLevelNavigation={navigation}
+          />
+          )}
+        </Stack.Screen>
+        {/* <Stack.Screen name={"MyPlants"} component={MyPlants}/> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

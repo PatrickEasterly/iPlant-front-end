@@ -22,8 +22,10 @@ import { NavigationContainer } from "@react-navigation/native";
 const Stack = createStackNavigator();
 import axios from "axios";
 import { ScrollView } from "react-native-gesture-handler";
-import { AppContext } from '../../Context';
-const API = "http://192.168.0.150:5000/api/rooms/user/1";
+import { AppContext } from "../../Context";
+
+// import { AppContext } from '../..';
+const API = "http://192.168.0.150:5000/app/room/";
 const API2 = 'http://192.168.0.150:5000/app/plant'
 
 class AddPlantToRoom extends React.Component {
@@ -41,14 +43,17 @@ class AddPlantToRoom extends React.Component {
   }
 
 
-
   componentDidMount() {
     this.getRoom();
   }
 
   getRoom() {
     axios
-      .get(API)
+      .get(API, {
+        headers: {
+          Authorization: `BEARER ${this.context.loggedIn}`
+        }
+  })
       .then(response => {
         console.log(response);
         console.log(response.data);
@@ -61,8 +66,7 @@ class AddPlantToRoom extends React.Component {
 
   addPlantToRoom(){
     const { navigation } = this.props;
-    axios.post(API2 , {
-        "userid": 1,
+   return (axios.post(API2 , {
         "roomid": this.state.currentRoomId,
         "plantinfoid": this.state.plant.id,
         "plantname": this.state.plant.commonname
@@ -70,23 +74,24 @@ class AddPlantToRoom extends React.Component {
         headers: {
           Authorization: `BEARER ${this.context.loggedIn}`
         }
-  }, () => {
-    navigation.navigate("AddPlantConfirmation")
-  })
+  }))
   console.log('inserted')
   console.log(this.state.currentRoomId)
   console.log(this.state.plant.id)
   console.log(this.state.plant.commonname)
- 
+  console.log('.')
  
 }
 
 
   render() {
     let plant = this.state.plant;
+    const {TopLevelNavigation} = this.props;
     
     return (
-    
+    <AppContext.Consumer>
+      {context => (
+
         <Content>
         <View style={{margin: 20}}>
         <ListItem>
@@ -108,9 +113,10 @@ class AddPlantToRoom extends React.Component {
                   thumbnail
                   style={{ margin: 6, marginLeft: 0, paddingLeft: 0 }}
                   onPress={() =>
-                    this.setState({currentRoomId: room.id}, () => {
-                        this.addPlantToRoom()
-                        
+                    this.setState({currentRoomId: room.id}, async () => {
+                        await this.addPlantToRoom()
+                        context.setShouldUpdate(true)
+                        TopLevelNavigation.navigate({name: 'MyPlants' })
                     })
                   
                   }
@@ -156,9 +162,13 @@ class AddPlantToRoom extends React.Component {
           </ScrollView>
         </List>
       </Content>
+      )}
+
+    </AppContext.Consumer>
     );
   }
 }
+
 AddPlantToRoom.contextType = AppContext;
 
 export default AddPlantToRoom;
