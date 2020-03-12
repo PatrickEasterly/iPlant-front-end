@@ -44,7 +44,7 @@ import MyPlants from "../Pages/MyPlants"
 
 const Stack = createStackNavigator();
 
-const API = "http://10.150.41.136:5000/api/plantinfo";
+const API = "http://10.150.51.107:5000/api/plantinfo";
 
 class PlantsSearchScreen extends React.Component {
   static renderPlant(plant) {

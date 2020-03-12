@@ -59,15 +59,15 @@ class RoomsScreen1 extends React.Component {
          room: {},
         currentRoom: '',
         rooms: [
-            {name: 'Office', img: office},
-            {name: 'Hall', img: hall},
-            {name: 'Kitchen', img: kitchen},
-            {name: 'Bathroom', img: bathroom},
-            {name: 'Porch', img: porch},
-            {name: 'Balcony', img: balcony},
-            {name: 'LivingRoom', img: livingroom},
-            {name: 'Patio', img: patio},
-            {name: 'Bedroom', img: bedroom},
+            {name: 'office', img: office},
+            {name: 'hall', img: hall},
+            {name: 'kitchen', img: kitchen},
+            {name: 'bathroom', img: bathroom},
+            {name: 'porch', img: porch},
+            {name: 'balcony', img: balcony},
+            {name: 'livingRoom', img: livingroom},
+            {name: 'patio', img: patio},
+            {name: 'bedroom', img: bedroom},
         ]
       }
     }

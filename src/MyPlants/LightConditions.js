@@ -47,7 +47,7 @@ import {
 
 } from "native-base";
 const office = require('../../assets/rooms/office.jpg')
-const API = "http://10.150.41.136:5000/app/room/";
+const API = "http://10.150.51.107:5000/app/room/";
 const Stack = createStackNavigator();
 const dark = require('../../assets/lightConditions/dark.jpg')
 const shade = require('../../assets/lightConditions/shade.jpg')

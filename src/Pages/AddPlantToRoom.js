@@ -46,8 +46,8 @@ const images = {
 }
 
 // import { AppContext } from '../..';
-const API = "http://10.150.41.136:5000/app/room/";
-const API2 = 'http://10.150.41.136:5000/app/plant'
+const API = "http://10.150.51.107:5000/app/room/";
+const API2 = 'http://10.150.51.107:5000/app/plant'
 
 class AddPlantToRoom extends React.Component {
   constructor(props) {
