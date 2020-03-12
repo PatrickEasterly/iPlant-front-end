@@ -4,9 +4,11 @@ import { CalendarList, Agenda} from 'react-native-calendars';
 import axios from 'axios';
 import moment from 'moment';
 
-const API = 'http://bcf5c561.ngrok.io/api/users/2'; 
+const API = 'http://2c2aa078.ngrok.io/api/users/2'; 
 export default class Calendar extends React.Component {
   constructor(props){
+
+    
     super(props);
     this.state = {
       stuff: {
@@ -16,43 +18,49 @@ export default class Calendar extends React.Component {
       '2020-03-11': [{name: 'item1'}, {name: 'item2'}],
       '2020-03-12': [{name: 'item3'}, {name: 'item4'}]
       },
-      chosenDate: '2020-03-11',
+      chosenDate: '2020-03-12',
     }
   }
 
   changeDay=(day)=>{
     let choice = day.dateString;
-    console.log(choice)
+    // console.log(choice)
     let current = this.state.allwaters[choice]
-    console.log(current)
+    // console.log(current)
     let result = {
       [choice]: current ? [...current] : []
     }
     this.setState({
       chosenDate: choice,
       stuff: result
-    }, ()=>console.log(this.state))
+    },
+     ()=>console.log('f')
+    //  ()=>console.log(this.state)
+     )
   }
   
   
    async componentDidMount() {
+    const today=this.newTime();
 
-    let future = await axios.get(`http://bcf5c561.ngrok.io/app/cal`, {
+    let future = await axios.get(`http://2c2aa078.ngrok.io/app/cal`, {
       headers: {
-        Authorization: `BEARER eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjMsImlhdCI6MTU4Mzk0MjE2OH0.g3dDPcIxPgudCzFpZOOgqYAXCUrvTo5VUbBYbejqXPs`
+        Authorization: `BEARER eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsImlhdCI6MTU4NDAyMzAxOX0.qQyexAtErzTjfDzU0ChpIcQNtizhZbL84yj09IX2-5I`
       }}
     )
     .then((res)=>{
-      console.log(res.data)
+      // console.log(res.data)
       let finalWater = {};
       let futureWaters = res.data.map((item)=>{
-        console.log(Object.keys(item))
+        // console.log(Object.keys(item))
         Object.keys(item).map((key)=>{
           if(!finalWater[key]){
             finalWater[key] = [];
           }
+          item[key].map((obj)=>obj.name = `Water your ${obj.name}`)
+          console.log("!!!!!!!!!!")
           console.log(item[key])
-          finalWater[key].push(item[key])
+          finalWater[key] = (item[key])
         })
       })
 
@@ -67,7 +75,7 @@ export default class Calendar extends React.Component {
       
       let finalWater = {};
       let plants = res.data.plants.map((plant)=>plant);
-      console.log(plants)
+      // console.log(plants)
       plants = plants.map((plant)=>{
         const result = {
           id: plant.id,
@@ -94,40 +102,48 @@ export default class Calendar extends React.Component {
           finalWater[time].push(result)
         })
       })
-      
       // console.table(this.state.allwaters)
       // console.table(finalWater)
       this.setState({
-        chosenDate: '2020-03-11',
+        chosenDate: today,
         allwaters: { ...finalWater},
         stuff: {
-          '2020-03-11': finalWater['2020-03-11']
+          [today]: finalWater[today]
         }
       }); return finalWater;
     })
 
-    console.log('*********************Future')
-    console.log(future)
-    console.log('*********************Past')
-    console.log(past)
+    // console.log('*********************Future')
+    // console.log(future)
+    // console.log('*********************Past')
+    // console.log(past)
+    
+    let newState = {
+      ...future,
+      ...past
+    }
+    // console.log(newState)
+    this.setState({
+      allwaters: newState
+    })
+
   }
 
-  // console.log(this.newTime())
   
   render() {
     // console.log('did render!')
-    console.log()
+    // console.log(this.state.stuff)
+    console.log(Object.keys(this.state.allwaters).map((key)=>({[key]: `#fff`})))
     return (
       <Agenda
-        // items={this.state.items}
         items={this.state.stuff}
-        // loadItemsForMonth={this.loadItems.bind(this)}
         selected={this.state.chosenDate}
         renderItem={this.renderItem.bind(this)}
         renderEmptyData={this.renderEmptyDate.bind(this)}
         rowHasChanged={this.rowHasChanged.bind(this)}
         onDayPress={(day)=>this.changeDay(day)}
-        // markingType={'period'}
+        markingType={'period'}
+        markedDates={Object.keys(this.state.allwaters).map((key)=>({[key]: {textColor: `#f0f`}}))}
         // markedDates={{
         //    '2017-05-08': {textColor: '#43515c'},
         //    '2017-05-09': {textColor: '#43515c'},
@@ -174,6 +190,7 @@ export default class Calendar extends React.Component {
     const date = new Date(time);
     return date.toISOString().split('T')[0];
   }
+
   newTime() {
     const date = new Date();
     return date.toISOString().split('T')[0];

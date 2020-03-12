@@ -10,7 +10,7 @@ import moment from 'moment';
 import { AppContext } from '../../Context';
 // import _ from 'lodash';
 
-const API = 'http://10.150.41.136:5000/app/user/'; 
+const API = 'http://2c2aa078.ngrok.io/app/user/'; 
 // const background = require('../../assets/bachgrund.png');
  
 // const API = 'http://833a33e6.ngrok.io/api/users/2'; 
@@ -84,6 +84,7 @@ class PlantsFirstScreen extends React.Component {
 //       ...current
 
   getPlantData = () => {
+    console.log(this.context)
     console.log(this.context)
     axios.get(API, {
       headers: {
