@@ -114,7 +114,7 @@ class LightConditions extends React.Component {
     
 
     addShadeRoom() {
-      axios.post(API,
+     return axios.post(API,
         {
           "roomimg": this.state.room.roomimg,
           "roomname": this.state.room.roomname,
@@ -126,11 +126,11 @@ class LightConditions extends React.Component {
             Authorization: `BEARER ${this.context.loggedIn}`
           }
         })
-        .then((res) => {
+       
           console.log('Shade Room added')
           console.log(this.state.selectedLightCondition)
 
-        })
+   
     }
     
 
@@ -199,8 +199,9 @@ class LightConditions extends React.Component {
                               // console.log(this.state.selectedLightCondition)
                               await this.determineLightCondition()
                               // navigation.navigate('MyPlants')
-                              context.setShouldUpdate(true)
-                              TopLevelNavigation.navigate({name: 'MyPlants' })
+                              context.setShouldUpdate(true, () => {
+                                TopLevelNavigation.navigate({name: 'MyPlants' })
+                              })
                             })
                   } 
                         >

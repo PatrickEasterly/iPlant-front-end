@@ -31,11 +31,13 @@ export default class App extends React.Component {
       }), ()=>console.log(this.state.loggedIn, "===================="));
     };
     
-    this.setShouldUpdate = (shouldUpdate) => {
+    this.setShouldUpdate = (shouldUpdate, cb=() => {
+
+    }) => {
       console.log('@$*RT$P%&#!&#&$%')
       this.setState({
         shouldUpdate
-      })
+      }, cb)
     }
 
     this.state = {

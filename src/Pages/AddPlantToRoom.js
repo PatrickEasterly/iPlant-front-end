@@ -47,7 +47,7 @@ const images = {
 
 // import { AppContext } from '../..';
 const API = "http://10.150.41.136:5000/app/room/";
-const API2 = 'http:/10.150.41.136:5000/app/plant'
+const API2 = 'http://10.150.41.136:5000/app/plant'
 
 class AddPlantToRoom extends React.Component {
   constructor(props) {
@@ -137,8 +137,10 @@ class AddPlantToRoom extends React.Component {
                     onPress={() =>
                       this.setState({currentRoomId: room.id}, async () => {
                           await this.addPlantToRoom()
-                          context.setShouldUpdate(true)
-                          TopLevelNavigation.navigate({name: 'MyPlants' })
+                          context.setShouldUpdate(true, () => {
+                            TopLevelNavigation.navigate({name: 'MyPlants' })
+
+                          })
                       })
                     }
                   >
@@ -158,7 +160,7 @@ class AddPlantToRoom extends React.Component {
                           shadowRadius: 50
                         }}
                         square
-                        source={{ uri: images[room.roomname] }}
+                        source={images[room.roomname]}
                         onError={() => {
                           this.setState({
                             roomimg: patio
