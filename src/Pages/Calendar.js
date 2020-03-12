@@ -19,6 +19,8 @@ export default class Calendar extends React.Component {
       '2020-03-12': [{name: 'item3'}, {name: 'item4'}]
       },
       chosenDate: '2020-03-12',
+      futureColors: null,
+      pastColors: null
     }
   }
 
@@ -122,9 +124,31 @@ export default class Calendar extends React.Component {
       ...future,
       ...past
     }
-    // console.log(newState)
+    let futureColors = {};
+     Object.keys(future).map((key)=>{
+       console.log(key);
+       if(!futureColors[key]){
+         futureColors[key] = {selected: false, marked: true, dotColor: 'blue', selectedColor: '#006359'};
+       }
+     })
+      let pastColors = {};
+     Object.keys(past).map((key)=>{
+      console.log(key);
+      if(!pastColors[key]){
+        pastColors[key] = {selected: false, marked: true, dotColor: 'green', selectedColor: 'green'};
+      }
+       
+     })
+
+    let allColors = {
+      ...pastColors,
+      ...futureColors
+    }
     this.setState({
-      allwaters: newState
+      allwaters: newState,
+      pastColors,
+      futureColors,
+      allColors
     })
 
   }
@@ -132,8 +156,8 @@ export default class Calendar extends React.Component {
   
   render() {
     // console.log('did render!')
-    // console.log(this.state.stuff)
-    console.log(Object.keys(this.state.allwaters).map((key)=>({[key]: `#fff`})))
+    console.log(this.state)
+    // console.log(Object.keys(this.state.colors))
     return (
       <Agenda
         items={this.state.stuff}
@@ -142,8 +166,9 @@ export default class Calendar extends React.Component {
         renderEmptyData={this.renderEmptyDate.bind(this)}
         rowHasChanged={this.rowHasChanged.bind(this)}
         onDayPress={(day)=>this.changeDay(day)}
-        markingType={'period'}
-        markedDates={Object.keys(this.state.allwaters).map((key)=>({[key]: {textColor: `#f0f`}}))}
+        // markingType={'multi-dot'}
+        markedDates={this.state.allColors}
+        // markedDates={{'2020-03-13' : {selected: false, marked: true, selectedColor: 'green'}}}
         // markedDates={{
         //    '2017-05-08': {textColor: '#43515c'},
         //    '2017-05-09': {textColor: '#43515c'},
@@ -160,8 +185,6 @@ export default class Calendar extends React.Component {
       />
     );
   }
-
-
 
   renderItem(item) {
     return (
