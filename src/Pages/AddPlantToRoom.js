@@ -26,8 +26,8 @@ import { AppContext } from "../../Context";
 const patio = require('../../assets/rooms/patio.jpg')
 
 // import { AppContext } from '../..';
-const API = "http://192.168.0.151:5000/app/room/";
-const API2 = 'http://192.168.0.151:5000/app/plant'
+const API = "http://10.150.41.136/app/room/";
+const API2 = 'http:/10.150.41.136:5000/app/plant'
 
 class AddPlantToRoom extends React.Component {
   constructor(props) {
