@@ -3,6 +3,7 @@ import { View, Text, ImageBackground, TouchableOpacity, Alert  } from 'react-nat
 import { CalendarList, Agenda} from 'react-native-calendars';
 import axios from 'axios';
 import moment from 'moment';
+import { Card, CardItem } from 'native-base';
 
 const API = 'http://2c2aa078.ngrok.io/api/users/2'; 
 export default class Calendar extends React.Component {
@@ -30,7 +31,7 @@ export default class Calendar extends React.Component {
     let current = this.state.allwaters[choice]
     // console.log(current)
     let result = {
-      [choice]: current ? [...current] : []
+      [choice]: current ? [...current] : null
     }
     this.setState({
       chosenDate: choice,
@@ -114,11 +115,6 @@ export default class Calendar extends React.Component {
         }
       }); return finalWater;
     })
-
-    // console.log('*********************Future')
-    // console.log(future)
-    // console.log('*********************Past')
-    // console.log(past)
     
     let newState = {
       ...future,
@@ -169,17 +165,8 @@ export default class Calendar extends React.Component {
         // markingType={'multi-dot'}
         markedDates={this.state.allColors}
         // markedDates={{'2020-03-13' : {selected: false, marked: true, selectedColor: 'green'}}}
-        // markedDates={{
-        //    '2017-05-08': {textColor: '#43515c'},
-        //    '2017-05-09': {textColor: '#43515c'},
-        //    '2017-05-14': {startingDay: true, endingDay: true, color: 'blue'},
-        //    '2017-05-21': {startingDay: true, color: 'blue'},
-        //    '2017-05-22': {endingDay: true, color: 'gray'},
-        //    '2017-05-24': {startingDay: true, color: 'gray'},
-        //    '2017-05-25': {color: 'gray'},
-        //    '2017-05-26': {endingDay: true, color: 'gray'}}}
         // monthFormat={'yyyy'}
-        // theme={{calendarBackground: 'red', agendaKnobColor: 'green'}}
+        theme={{calendarBackground: '#fffff5', agendaKnobColor: 'green', backgroundColor: '#fffff5'}}
         //renderDay={(day, item) => (<Text>{day ? day.day: 'item'}</Text>)}
         // hideExtraDays={false}
       />
@@ -190,7 +177,7 @@ export default class Calendar extends React.Component {
     return (
       <TouchableOpacity 
         style={[styles.item, {height: item.height}]} 
-        onPress={() => Alert.alert(item.name)}
+        // onPress={() => Alert.alert(item.name)}
       >
         <Text>{item.name}</Text>
       </TouchableOpacity>
@@ -200,7 +187,11 @@ export default class Calendar extends React.Component {
   renderEmptyDate() {
     return (
       <View style={styles.emptyDate}>
-        <Text>This is empty date!</Text>
+        <Card>
+          <CardItem>
+            <Text>No tasks scheduled for today</Text>
+          </CardItem>
+        </Card>
       </View>
     );
   }
