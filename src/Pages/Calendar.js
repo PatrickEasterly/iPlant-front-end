@@ -10,14 +10,11 @@ export default class Calendar extends React.Component {
     super(props);
     this.state = {
       stuff: {
-      '2020-03-11': [{name: 'item1'}, {name: 'item2'}],
+      '2020-03-11': [{name: 'Your plants are loading 😁'}],
       },
       allwaters: {
       '2020-03-11': [{name: 'item1'}, {name: 'item2'}],
       '2020-03-12': [{name: 'item3'}, {name: 'item4'}]
-      },
-      rooms: {
-        // rooms
       },
       chosenDate: '2020-03-11',
     }
@@ -36,11 +33,39 @@ export default class Calendar extends React.Component {
       stuff: result
     }, ()=>console.log(this.state))
   }
+  
+  
+   async componentDidMount() {
 
-  componentWillMount() {
-    axios.get(API)
+    let future = await axios.get(`http://bcf5c561.ngrok.io/app/cal`, {
+      headers: {
+        Authorization: `BEARER eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjMsImlhdCI6MTU4Mzk0MjE2OH0.g3dDPcIxPgudCzFpZOOgqYAXCUrvTo5VUbBYbejqXPs`
+      }}
+    )
+    .then((res)=>{
+      console.log(res.data)
+      let finalWater = {};
+      let futureWaters = res.data.map((item)=>{
+        console.log(Object.keys(item))
+        Object.keys(item).map((key)=>{
+          if(!finalWater[key]){
+            finalWater[key] = [];
+          }
+          console.log(item[key])
+          finalWater[key].push(item[key])
+        })
+      })
+
+      console.log(finalWater)
+      this.setState({
+          futureWater: {...finalWater}
+      })
+      return finalWater;
+    })
+     let past = await axios.get(API)
     .then((res) => {
       
+      let finalWater = {};
       let plants = res.data.plants.map((plant)=>plant);
       console.log(plants)
       plants = plants.map((plant)=>{
@@ -55,22 +80,14 @@ export default class Calendar extends React.Component {
         };
         return result;
       })
-
-
-      // let waters = [];
-      let finalWater = {};
+      
       plants.map((plant)=>{
         let plantname=plant.commonname
-
-
         plant.waters.map((water)=>{
           
           let stringy = `You watered your ${plantname}`;
           let time = [water.watertime.split('T')[0]];
           let result = {name: stringy};
-          // waters.push({
-          //  [time] : result
-          // })
           if(!finalWater[time]){
             finalWater[time] = [];
           }
@@ -78,18 +95,28 @@ export default class Calendar extends React.Component {
         })
       })
       
-      console.table(this.state.allwaters)
-      console.table(finalWater)
+      // console.table(this.state.allwaters)
+      // console.table(finalWater)
       this.setState({
-        allwaters: finalWater
-      })
+        chosenDate: '2020-03-11',
+        allwaters: { ...finalWater},
+        stuff: {
+          '2020-03-11': finalWater['2020-03-11']
+        }
+      }); return finalWater;
     })
-    // At this point in the night, this is what my brain returns. Delete this comment when you clean it up. 
+
+    console.log('*********************Future')
+    console.log(future)
+    console.log('*********************Past')
+    console.log(past)
   }
+
+  // console.log(this.newTime())
   
   render() {
-    // console.log('rerendering!')
-    // console.log(this.state.stuff)
+    // console.log('did render!')
+    console.log()
     return (
       <Agenda
         // items={this.state.items}
@@ -147,6 +174,11 @@ export default class Calendar extends React.Component {
     const date = new Date(time);
     return date.toISOString().split('T')[0];
   }
+  newTime() {
+    const date = new Date();
+    return date.toISOString().split('T')[0];
+  }
+  
 
 }
 
