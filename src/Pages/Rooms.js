@@ -1,6 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+import getTheme from '../../native-base-theme/components';
+import material from '../../native-base-theme/variables/material';
 // import { AppContext } from '../../Context';
 /*This is an Example of Grid View in React Native*/
 //import rect in our project
@@ -13,6 +15,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 //import all the components we will need
+import { Font } from 'expo';
 
 import Autocomplete from "native-base-autocomplete"; /* eslint-disable-line import/no-unresolved */
 import {
@@ -25,25 +28,26 @@ import {
   Header,
   Tabs,
   ScrollableTab,
-  Tab
+  Tab,
+  StyleProvider,
+  ImageBackground
 } from "native-base";
 import LightConditions from "../MyPlants/LightConditions";
-import MyPlants from "../Pages/MyPlants"
+// import MyPlants from "../Pages/MyPlants"
 // import { StackNavigator } from "react-navigation";
-import axios from "axios";
-import {
-  Content,
-  Item,
-  Input,
-  Icon,
-  ListItem,
-  Thumbnail,
-  Body,
-  Left,
-  Right,
-  ActionSheet
-} from "native-base";
+// import axios from "axios";
+
 const office = require('../../assets/rooms/office.jpg')
+const hall = require('../../assets/rooms/hallway.jpg')
+const kitchen = require('../../assets/rooms/kitchen.jpg')
+const bathroom = require('../../assets/rooms/bathroom.jpg')
+const porch = require('../../assets/rooms/porch.jpg')
+const balcony = require('../../assets/rooms/balcony.jpg')
+const livingroom = require('../../assets/rooms/livingroom.jpg')
+const patio = require('../../assets/rooms/patio.jpg')
+const bedroom = require('../../assets/rooms/bedroom.jpg')
+
+
 
 const Stack = createStackNavigator();
 
@@ -52,20 +56,18 @@ class RoomsScreen1 extends React.Component {
         super(props);
         this.state = {
          dataSource: {},
-         room: {
-        
-        },
+         room: {},
         currentRoom: '',
         rooms: [
             {name: 'Office', img: office},
-            {name: 'Hall', img: ''},
-            {name: 'Kitchen', img: ''},
-            {name: 'Bathroom', img: ''},
-            {name: 'Porch', img: ''},
-            {name: 'Balcony', img: ''},
-            {name: 'LivingRoom', img: ''},
-            {name: 'Patio', img: ''},
-            {name: 'Bedroom', img: ''},
+            {name: 'Hall', img: hall},
+            {name: 'Kitchen', img: kitchen},
+            {name: 'Bathroom', img: bathroom},
+            {name: 'Porch', img: porch},
+            {name: 'Balcony', img: balcony},
+            {name: 'LivingRoom', img: livingroom},
+            {name: 'Patio', img: patio},
+            {name: 'Bedroom', img: bedroom},
         ]
       }
     }
@@ -89,7 +91,7 @@ class RoomsScreen1 extends React.Component {
         if (this.state.currentRoom.name === 'Balcony') {
             this.addBalcony()
         }
-        if (this.state.currentRoom.name === 'Livingroom') {
+        if (this.state.currentRoom.name === 'LivingRoom') {
             this.addLivingroom()
         }
         if (this.state.currentRoom.name === 'Patio') {
@@ -101,6 +103,7 @@ class RoomsScreen1 extends React.Component {
     }
     
     addOffice() {
+        const {navigation} = this.props;
         this.setState({
             room: {
                 roomname: 'Office',
@@ -111,112 +114,145 @@ class RoomsScreen1 extends React.Component {
         }, () => {
             console.log('office added')
             console.log(this.state.room)
+            navigation.navigate('LightConditions', {room: this.state.room})
+
         })
         
     }
 
     addHall() {
+        const {navigation} = this.props;
         this.setState({
             room: {
                 roomname: 'Hall',
                 hightemp: 77,
-                lowtemp: 66
+                lowtemp: 66,
+                roomimg: hall
+
             }
         }, () => {
             console.log('hall added')
             console.log(this.state.room)
-
+            navigation.navigate('LightConditions', {room: this.state.room})
         })
     }
 
     addKitchen() {
+        const {navigation} = this.props;
         this.setState({
             room: {
                 roomname: 'Kitchen',
                 hightemp: 77,
-                lowtemp: 66
+                lowtemp: 66,
+                roomimg: kitchen
+
             }
         }, () => {
             console.log('kitchen added')
             console.log(this.state.room)
+            navigation.navigate('LightConditions', {room: this.state.room})
         })
     }
 
     addBathroom() {
+        const {navigation} = this.props;
         this.setState({
             room: {
                 roomname: 'Bathroom',
                 hightemp: 77,
-                lowtemp: 66
+                lowtemp: 66,
+                roomimg: bathroom
+
             }
         }, () => {
             console.log('bathroom added')
             console.log(this.state.room)
+            navigation.navigate('LightConditions', {room: this.state.room})
         })
     }
 
     addPorch() {
+        const {navigation} = this.props;
+
         this.setState({
             room: {
                 roomname: 'Porch',
                 hightemp: 77,
-                lowtemp: 66
+                lowtemp: 66,
+                roomimg: porch
+
             }
         }, () => {
             console.log('porch added')
             console.log(this.state.room)
+            navigation.navigate('LightConditions', {room: this.state.room})
         })
     }
 
     addBalcony() {
+        const {navigation} = this.props;
         this.setState({
             room: {
                 roomname: 'Balcony',
                 hightemp: 77,
-                lowtemp: 66
+                lowtemp: 66,
+                roomimg: balcony
+
             }
         }, () => {
             console.log('balcony added')
             console.log(this.state.room)
+            navigation.navigate('LightConditions', {room: this.state.room})
         })
     }
 
     addLivingroom() {
+        const {navigation} = this.props;
         this.setState({
             room: {
                 roomname: 'Livingroom',
                 hightemp: 77,
-                lowtemp: 66
+                lowtemp: 66,
+                roomimg: livingroom
             }
         }, () => {
             console.log('living room added')
             console.log(this.state.room)
+            navigation.navigate('LightConditions', {room: this.state.room})
         })
     }
 
     addPatio() {
+        const {navigation} = this.props;
         this.setState({
             room: {
                 roomname: 'Patio',
                 hightemp: 77,
-                lowtemp: 66
+                lowtemp: 66,
+                roomimg: patio
+
             }
         }, () => {
             console.log('patio added')
             console.log(this.state.room)
+            navigation.navigate('LightConditions', {room: this.state.room})
         })
     }
 
     addBedroom() {
+        const {navigation} = this.props;
         this.setState({
             room: {
                 roomname: 'Bedroom',
                 hightemp: 77,
-                lowtemp: 66
+                lowtemp: 66,
+                roomimg: bedroom
+
             }
         }, () => {
             console.log('bedroom added')
             console.log(this.state.room)
+            navigation.navigate('LightConditions', {room: this.state.room})
         })
     }
 
@@ -224,32 +260,67 @@ class RoomsScreen1 extends React.Component {
   render() {
     const {navigation} = this.props;
     return (
+        <StyleProvider style={getTheme(material)}>
         <Container>
-        <Header/>
+        {/* <Header/> */}
+        <View style={styles.header}>
+            <Text>Pick A Home For Your Plant</Text>
+            <Text style={{marginTop: 20}}> This will give us an idea of what your plants needs are</Text>
+        </View>
         <View style={styles.MainContainer}>
+        
         <FlatList
           data={this.state.rooms}
+          contentContainerStyle={styles.col}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={
                 () => this.setState({currentRoom: item}, () => {
                 this.determineRoom()
-                navigation.navigate('LightConditions', {room: this.state.room})
             })
         } 
-            style={{ flex: 1, flexDirection: 'column', margin: 15, justifyContent: 'center'}}>
-              <Image style={styles.imageThumbnail} source={item.img} />
-                <View style={{alignItems: 'center', marginTop: 10}} >
-                    <Text>{item.name}</Text>
+            style={{ flex: 1, flexDirection: 'column', margin: 10, padding: 1, justifyContent: 'center', alignItems: 'center'}}>
+                {/* <ImageBackground
+                    source={{ uri: item.img }}
+                    style={{
+                        height: 100,
+                        width: 100,
+                        position: 'relative', // because it's parent
+                        top: 2,
+                        left: 2
+                    }}
+                    >
+                    <Text
+                        style={{
+                        fontWeight: 'bold',
+                        color: 'white',
+                        position: 'absolute', // child
+                        bottom: 0, // position where you want
+                        left: 0
+                        }}
+                    >
+                        {item.name}
+                    </Text>
+                </ImageBackground> */}
+              <Image style={styles.imageThumbnail} source={item.img}>
+              </Image>
+                <View style={{alignItems: 'end', paddingTop: 12, position: 'absolute'}} >
+                    <Text style={{color: 'white'}}>{item.name}</Text>
                 </View>
+
             </TouchableOpacity>
           )}
           //Setting the number of column
           numColumns={3}
+          columnWrapperStyle={styles.col} 
           keyExtractor={(item, index) => index.toString()}
         />
+
+    
       </View>
 
         </Container>
+
+        </StyleProvider>
 
         
     );
@@ -258,15 +329,23 @@ class RoomsScreen1 extends React.Component {
 
 
 
-export default function Rooms () {
+export default function Rooms (props) {
+    const {navigation} = props;
     return(
 
     <NavigationContainer independent={true}>
     <Stack.Navigator headerMode="float" mode="modal">
       <Stack.Screen name={'RoomsScreen1'} component={RoomsScreen1}
       options={{headerShown: false}} />
-      <Stack.Screen name={'LightConditions'} component={LightConditions}  />
-      <Stack.Screen name={'MyPlants'} component={MyPlants}  />
+      <Stack.Screen options={{title: 'Light', headerBackTitle: ''}}  name={'LightConditions'}>
+          
+            {props => (
+            <LightConditions
+            {...props}
+            TopLevelNavigation={navigation}
+          />
+          )}
+      </Stack.Screen>
     </Stack.Navigator>
   </NavigationContainer>
     )
@@ -275,15 +354,39 @@ export default function Rooms () {
 
 
 const styles = {
+    col: {
+        margin: 1, 
+        padding: 1
+    },
   MainContainer: {
     justifyContent: 'center',
     flex: 1,
-    paddingTop: 30,
+    paddingTop: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    marginTop: 60
   },
   imageThumbnail: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 100,
-    width: 100
-  },
+    justifyContent: 'left',
+    alignItems: 'end',
+    height: 150,
+    width: 110,
+    marginTop: 10,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+        width: 0,
+        height: 12,
+    },
+    shadowOpacity: 0.58,
+    shadowRadius: 16.00,
+    
+    elevation: 24,
+    },
+    header: {
+        marginTop: 100,
+        marginBottom: 5,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
 };

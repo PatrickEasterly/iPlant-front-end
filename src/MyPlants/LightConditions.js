@@ -1,6 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+import getTheme from '../../native-base-theme/components';
+import material from '../../native-base-theme/variables/material';
 // import { AppContext } from '../../Context';
 /*This is an Example of Grid View in React Native*/
 //import rect in our project
@@ -25,7 +27,8 @@ import {
   Header,
   Tabs,
   ScrollableTab,
-  Tab
+  Tab,
+  StyleProvider
 } from "native-base";
 // import { StackNavigator } from "react-navigation";
 import axios from "axios";
@@ -39,12 +42,19 @@ import {
   Body,
   Left,
   Right,
-  ActionSheet
+  ActionSheet, 
+  Title,
+
 } from "native-base";
 const office = require('../../assets/rooms/office.jpg')
-const API = "http://192.168.0.150:5000/app/room";
+const API = "http://192.168.0.151:5000/app/room/";
 const Stack = createStackNavigator();
 const dark = require('../../assets/lightConditions/dark.jpg')
+const shade = require('../../assets/lightConditions/shade.jpg')
+const partsun = require('../../assets/lightConditions/partsun.jpg')
+const fullsun = require('../../assets/lightConditions/fullsun.jpg')
+
+import { AppContext } from "../../Context";
 
 class LightConditions extends React.Component {
     constructor(props) {
@@ -54,11 +64,15 @@ class LightConditions extends React.Component {
          room: this.props.route.params.room,
          lightConditions: [
             {name: 'Dark', img: dark },
-            {name: 'Shade', img:'' },
-            {name: 'Part sun, part shade', img: ''},
-            {name: 'Full sun', img:'' }
+            {name: 'Shade', img: shade },
+            {name: 'Part sun, part shade', img: partsun},
+            {name: 'Full sun', img: fullsun }
         ]
       }
+    }
+
+    componentDidMount() {
+      console.log(this.props.route)
     }
 
     determineLightCondition() {
@@ -77,102 +91,145 @@ class LightConditions extends React.Component {
     }
     
     addDarkRoom() {
-            axios.post(API, {
-                "userid": 1,
-                "roomimg": this.state.room.roomimg,
-                "roomname": this.state.room.roomname,
-                "hightemp": this.state.room.hightemp,
-                "lowtemp": this.state.room.lowtemp,
-                "lightamount": this.state.selectedLightCondition
-            }, () => {
-                console.log('Dark Room added')
-                console.log(this.state.selectedLightCondition)
-            })
-           
-        
+        axios.post(API,
+        {
+          "roomimg": this.state.room.roomimg,
+          "roomname": this.state.room.roomname,
+          "hightemp": this.state.room.hightemp,
+          "lowtemp": this.state.room.lowtemp,
+          "lightamount": this.state.selectedLightCondition.name
+        }, {
+          headers: {
+            Authorization: `BEARER ${this.context.loggedIn}`
+          }
+        })
+        .then((res) => {
+          console.log('Dark Room added')
+          console.log(this.state.selectedLightCondition)
+
+        })
     }
+    
+        
+    
 
     addShadeRoom() {
-        this.setState({
-            selectedLightCondition: 'Dark'
-        }, () => {
-            axios.post(API, {
-                "userid": 1,
-                "roomimg": this.state.room.roomimg,
-                "roomname": this.state.room.roomname,
-                "hightemp": this.state.room.hightemp,
-                "lowtemp": this.state.room.lowtemp,
-                "lightamount": this.state.selectedLightCondition
-            })
-            console.log('Dark Room added')
-            console.log(this.state.selectedLightCondition)
+      axios.post(API,
+        {
+          "roomimg": this.state.room.roomimg,
+          "roomname": this.state.room.roomname,
+          "hightemp": this.state.room.hightemp,
+          "lowtemp": this.state.room.lowtemp,
+          "lightamount": this.state.selectedLightCondition.name
+        }, {
+          headers: {
+            Authorization: `BEARER ${this.context.loggedIn}`
+          }
+        })
+        .then((res) => {
+          console.log('Shade Room added')
+          console.log(this.state.selectedLightCondition)
+
         })
     }
+    
 
     addPartSunPartShadeRoom() {
-        this.setState({
-            selectedLightCondition: 'Dark'
-        }, () => {
-            axios.post(API, {
-                "userid": 1,
-                "roomimg": this.state.room.roomimg,
-                "roomname": this.state.room.roomname,
-                "hightemp": this.state.room.hightemp,
-                "lowtemp": this.state.room.lowtemp,
-                "lightamount": this.state.selectedLightCondition
-            })
-            console.log('Dark Room added')
-            console.log(this.state.selectedLightCondition)
+      axios.post(API,
+        {
+          "roomimg": this.state.room.roomimg,
+          "roomname": this.state.room.roomname,
+          "hightemp": this.state.room.hightemp,
+          "lowtemp": this.state.room.lowtemp,
+          "lightamount": this.state.selectedLightCondition.name
+        }, {
+          headers: {
+            Authorization: `BEARER ${this.context.loggedIn}`
+          }
+        })
+        .then((res) => {
+          console.log('Part Sun Room added')
+          console.log(this.state.selectedLightCondition)
+
         })
     }
+    
 
     addFullSunRoom() {
-        this.setState({
-            selectedLightCondition: 'Dark'
-        }, () => {
-            axios.post(API, {
-                "userid": 1,
-                "roomimg": this.state.room.roomimg,
-                "roomname": this.state.room.roomname,
-                "hightemp": this.state.room.hightemp,
-                "lowtemp": this.state.room.lowtemp,
-                "lightamount": this.state.selectedLightCondition
-            })
-            console.log('Dark Room added')
-            console.log(this.state.selectedLightCondition)
+      axios.post(API,
+        {
+          "roomimg": this.state.room.roomimg,
+          "roomname": this.state.room.roomname,
+          "hightemp": this.state.room.hightemp,
+          "lowtemp": this.state.room.lowtemp,
+          "lightamount": this.state.selectedLightCondition.name
+        }, {
+          headers: {
+            Authorization: `BEARER ${this.context.loggedIn}`
+          }
+        })
+        .then((res) => {
+          console.log('Full Sun Room added')
+          console.log(this.state.selectedLightCondition)
+
         })
     }
 
 
  
   render() {
-    const {navigation} = this.props;
+    const {TopLevelNavigation} = this.props;
     return (
-        <Container>
-        <View style={styles.MainContainer}>
-        <FlatList
-          data={this.state.lightConditions}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={
-                () => this.setState({selectedLightCondition: item}, () => {
-                    // console.log(this.state.selectedLightCondition)
-                    this.determineLightCondition()
-                    // navigation.navigate('MyPlants')
-            })
-        } 
-            style={{ flex: 1, flexDirection: 'column', margin: 15, justifyContent: 'center'}}>
-              <Image style={styles.imageThumbnail} source={item.img} />
-                <View style={{alignItems: 'center', marginTop: 10}} >
-                    <Text>{item.name}</Text>
-                </View>
-            </TouchableOpacity>
-          )}
-          //Setting the number of column
-          numColumns={1}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
-        </Container>
+    
+      <AppContext.Consumer>
+        {context => (
+          
+          <Container>
+            <StyleProvider style={getTheme(material)}>
+                <View style={styles.MainContainer}>
+                <FlatList
+                  data={this.state.lightConditions}
+                  renderItem={({ item }) => (
+                    <View
+                    style={{ flex: 1, flexDirection: 'column', margin: 15, justifyContent: 'center'}}>
+              
+                        <ListItem thumbnail
+                        onPress={
+                          () => this.setState({selectedLightCondition: item}, async () => {
+                              // console.log(this.state.selectedLightCondition)
+                              await this.determineLightCondition()
+                              // navigation.navigate('MyPlants')
+                              context.setShouldUpdate(true)
+                              TopLevelNavigation.navigate({name: 'MyPlants' })
+                            })
+                  } 
+                        >
+                          <Left>
+                            <Thumbnail style={styles.imageThumbnail} square source={item.img} />
+                          </Left>
+                          <Body style={{height:110, justifyContent: 'center'}}>
+                            <Text>{item.name}</Text>
+                            <Text note numberOfLines={1}>Its time to build a difference . .</Text>
+                          </Body>
+                          <Right>
+                            {/* <Button transparent>
+                              <Text>View</Text>
+                            </Button> */}
+                          </Right>
+                        </ListItem>
+                    </View>
+                  )}
+                  //Setting the number of column
+                  numColumns={1}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              </View>
+
+            </StyleProvider>
+          </Container>
+          
+        )}
+      </AppContext.Consumer>
 
         
     );
@@ -180,6 +237,7 @@ class LightConditions extends React.Component {
 
 }
 
+LightConditions.contextType = AppContext;
 
 
 export default LightConditions
@@ -193,7 +251,18 @@ const styles = {
     imageThumbnail: {
       justifyContent: 'center',
       alignItems: 'center',
-      height: 100,
-      width: 100
-    },
+      height: 110,
+      width: 110,
+      marginTop: 10,
+      borderRadius: 10,
+      shadowColor: "#000",
+      shadowOffset: {
+          width: 0,
+          height: 12,
+      },
+      shadowOpacity: 0.58,
+      shadowRadius: 16.00,
+      
+      elevation: 24,
+      }
   };
