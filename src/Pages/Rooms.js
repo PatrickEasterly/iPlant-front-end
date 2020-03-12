@@ -173,7 +173,6 @@ class RoomsScreen1 extends React.Component {
 
     addPorch() {
         const {navigation} = this.props;
-
         this.setState({
             room: {
                 roomname: 'Porch',

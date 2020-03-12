@@ -23,10 +23,30 @@ const Stack = createStackNavigator();
 import axios from "axios";
 import { ScrollView } from "react-native-gesture-handler";
 import { AppContext } from "../../Context";
+const office = require('../../assets/rooms/office.jpg')
+const hall = require('../../assets/rooms/hallway.jpg')
+const kitchen = require('../../assets/rooms/kitchen.jpg')
+const bathroom = require('../../assets/rooms/bathroom.jpg')
+const porch = require('../../assets/rooms/porch.jpg')
+const balcony = require('../../assets/rooms/balcony.jpg')
+const livingroom = require('../../assets/rooms/livingroom.jpg')
 const patio = require('../../assets/rooms/patio.jpg')
+const bedroom = require('../../assets/rooms/bedroom.jpg')
+const images = {
+  patio,
+  office,
+  hall,
+  kitchen,
+  bathroom,
+  porch,
+  balcony,
+  livingroom,
+  patio,
+  bedroom,
+}
 
 // import { AppContext } from '../..';
-const API = "http://10.150.41.136/app/room/";
+const API = "http://10.150.41.136:5000/app/room/";
 const API2 = 'http:/10.150.41.136:5000/app/plant'
 
 class AddPlantToRoom extends React.Component {
@@ -59,13 +79,7 @@ class AddPlantToRoom extends React.Component {
       .then(response => {
         console.log(response);
         console.log(response.data);
-        this.setState({ rooms: response.data , roomimg: response.data.map((room) => {
-    
-            return room.roomimg
-
-          
-          
-        })}, () => {console.log(this.state.roomimg)});
+        this.setState({ rooms: response.data })
       })
       .catch(error => {
         console.error(error);
@@ -126,7 +140,6 @@ class AddPlantToRoom extends React.Component {
                           context.setShouldUpdate(true)
                           TopLevelNavigation.navigate({name: 'MyPlants' })
                       })
-                    
                     }
                   >
                     <Left style={{ marginLeft: 0, paddingLeft: 0 }}>
@@ -145,7 +158,7 @@ class AddPlantToRoom extends React.Component {
                           shadowRadius: 50
                         }}
                         square
-                        source={{ uri: this.state.roomimg[i] }}
+                        source={{ uri: images[room.roomname] }}
                         onError={() => {
                           this.setState({
                             roomimg: patio

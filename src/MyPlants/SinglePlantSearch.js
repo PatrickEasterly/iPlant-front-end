@@ -79,7 +79,7 @@ class SinglePlantSearch extends React.Component {
             </CardItem>
             <CardItem cardBody>
               <Image
-                source={{ uri: plant.photo }}
+                source={{ uri: plant.bigphoto }}
                 style={{ height: 240, width: null, flex: 1 }}
               />
             </CardItem>
