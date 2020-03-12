@@ -41,7 +41,8 @@ class Login extends React.Component{
                 <Form>
                   <FormItem floatingLabel>
                     <Label>UserName</Label>
-                    <Input 
+                    <Input
+                    keyboardType= 'visible-password' 
                     onChangeText={text=>this.setState({username: text})}
                     />
                   </FormItem>
@@ -73,11 +74,12 @@ class Login extends React.Component{
       _login= async (username, password)=> {
         const {navigation} = this.props;
         let temp;
-        let login = await axios.post("http://833a33e6.ngrok.io/app/user/login", {"username": `${username}`, "password": `${password}`}).then((res)=>{
-          console.log(res)
-          this.setState({
-            login: true,
-            token: res.data.token
+        let login = await axios.post("http://192.168.0.151:5000/app/user/login", {"username": `${username}`, "password": `${password}`})
+          .then((res)=> {
+            console.log(res)
+            this.setState({
+              login: true,
+              token: res.data.token
           })
           return res;
         })

@@ -10,10 +10,10 @@ import moment from 'moment';
 import { AppContext } from '../../Context';
 // import _ from 'lodash';
 
-// const API = 'http://192.168.0.150:5000/api/users/1'; 
+const API = 'http://192.168.1.132:5000/app/user/'; 
 // const background = require('../../assets/bachgrund.png');
-// const API = 'http://192.168.0.119:6000/api/users/2'; 
-const API = 'http://833a33e6.ngrok.io/api/users/2'; 
+ 
+// const API = 'http://833a33e6.ngrok.io/api/users/2'; 
 const Stack = createStackNavigator();
 
 class PlantsFirstScreen extends React.Component {
@@ -28,130 +28,195 @@ class PlantsFirstScreen extends React.Component {
 
   // get rooms array, plants objects
   componentDidMount() {
-    console.log(this.context)
-    axios.get(API)
-    .then((res) => {
-      let rooms = res.data.plants.map((plant)=>plant.room.roomname)
-      rooms = [...new Set(rooms)]
-      let plants = [...res.data.plants];
-      plants.map((item)=>item.needsWater=this.checkWater(item))
-      // console.log(plants)
-      this.setState({ user: res.data, rooms: ["All", ...rooms], plants });
-    })
+    this.getPlantData()
   }
   //checkWater takes in a plant object with waters array.
   // returns true if plant needs water.
   // returns false if plant doesn't need water.
-  checkWater(plant) {
-    let now = moment();
-    let recentWater = moment(plant.waters[plant.waters.length-1].watertime);
-    // console.log(moment(recentWater));
-    if (plant.plantInfo.waterneeds.includes("high")){
-        if (recentWater > now.subtract(3, 'days')){
-            return false;
-        }
-        return true;
-    }
-    if (plant.plantInfo.waterneeds.includes("moderate")){
-        if (recentWater > now.subtract(8, 'days')){
-            return false;
-        }
-        return true;
-    }
-    if (plant.plantInfo.waterneeds.includes("low")){
-        if (recentWater > now.subtract(3, 'weeks')){
-            return false;
-        }
-        return true;
-    }
-    if(plant.plantInfo.waterneeds.includes("dry")){
-        return false;
-    }
-    return true;
-}
 
-  async addWater(plant) {
-    // Run the waterplant post, and then confirm it
-    await axios.post(`http://833a33e6.ngrok.io/app/water`, 
-    {"plantid": plant.id}, {
+  getPlantData = () => {
+    console.log(this.context)
+    axios.get(API, {
       headers: {
         Authorization: `BEARER ${this.context.loggedIn}`
       }
-    })
-    // Get the plant, set needsWater to false in state
-    let current = {...this.state};
-    let changedPlant = current.plants[current.plants.indexOf(plant)]
-    changedPlant.needsWater = false;
-    this.setState({
-      ...current
+    }
+    )
+    .then((res) => {
+      // console.log(res)
+      let rooms = res.data.rooms.map((room)=>{
+        room.plants = res.data.plants.filter((plant)=> plant.room.id == room.id);
+        return room
+      })
+      this.setState({
+        rooms: rooms
+      })
+      console.log(this.state.rooms)
+      console.log(this.state.rooms)
+
+      // this.state.rooms.map((room)=>{
+      //   // room.plants.map((plant)=>plant.needsWater=this.checkWater(plant))
+      // })
+
     })
   }
 
+  // checkWater(plant) {
+//     // console.log(plant)
+//     // console.log('inside')
+//     let now = moment();
+//     if(plant.waters.length == 0){
+//         return true;
+//     }
+//     let recentWater = moment(plant.waters[plant.waters.length-1].watertime);
+//     // console.log(moment(recentWater));
+//     if (plant.plantInfo.waterneeds.includes("high")){
+//         if (recentWater > now.subtract(3, 'days')){
+//             return false;
+//         }
+//         return true;
+//     }
+//     if (plant.plantInfo.waterneeds.includes("moderate")){
+//         if (recentWater > now.subtract(8, 'days')){
+//             return false;
+//         }
+//         return true;
+//     }
+//     if (plant.plantInfo.waterneeds.includes("low")){
+//         if (recentWater > now.subtract(3, 'weeks')){
+//             return false;
+//         }
+//         return true;
+//     }
+//     if(plant.plantInfo.waterneeds.includes("dry")){
+//         return false;
+//     }
+//     return true;
+// }
+
+  // async addWater(plant) {
+  //   // Run the waterplant post, and then confirm it
+  //   await axios.post(`http://192.168.1.132:5000/app/water`, 
+  //   {"plantid": plant.id}, {
+  //     headers: {
+  //       Authorization: `BEARER ${this.context.loggedIn}`
+  //     }
+  //   }, () => {
+  //     this.setState({
+
+  //     })
+  //   })
+  //   // Get the plant, set needsWater to false in state
+  //   // let current = {...this.state};
+  //   console.log("*************")
+  //   // console.log(current)
+  //   let changedPlant = current.rooms.plants[current.plants.indexOf(plant)]
+  //   changedPlant.needsWater = false;
+  //   console.log(plants)
+  //   this.setState({
+  //     ...current
+  //   })
+  // }
+
   render() {
-    const {navigation} = this.props;
-    
-    // Render the tabs heading as roomname and tab as the appropriate content
-    const roomList = this.state.rooms.map((room)=>{
-      let plants = this.state.plants;
-      // Show all plants for selected room
-      if(room!=="All") {
-        plants = plants.filter(function(plant) {
-          return plant.room.roomname===room;
-      })
-      }
-      // Once the plants are filtered, make clickable elements for them
-      plants = plants.map((plant)=>{
+    if(this.props.route?.params?.shouldUpdate) {
+      debugger
+      this.getPlantData()
+    }
+      const {navigation} = this.props;
+      
+      // Render the tabs heading as roomname and tab as the appropriate content
+      
+      const roomList = this.state.rooms.map((room)=>{
+        // console.log(plants)
+        // Show all plants for selected room
+        // if(room!=="All") {
+        //   plants = plants.filter(function(plant) {
+        //     return plant.room.roomname===room;
+        // })
+        
+        // // Once the plants are filtered, make clickable elements for them
+        let plants = room.plants.map((plant)=>{
+          return (
+            <TouchableOpacity 
+            key={plant.id} 
+            onPress={()=>navigation.navigate('SinglePlant', {plant: plant})}>
+              <Card>
+                <CardItem bordered style={styles.horizontalContainer}>
+                  <Left><Text>{plant.plantInfo.commonname}</Text></Left>
+                  {/* {!plant.needsWater ? */}
+                  <Right>
+                    <Button warning 
+                    // onPress={
+                  //   this.addWater(plant)
+                  // }
+                  >
+                    <Text>😩💧</Text>
+                  </Button>
+                  </Right> 
+                  {/* : */}
+                  <Right><Button  success><Text>😊✔️</Text></Button></Right>
+                  {/* } */}
+                </CardItem>
+                <CardItem bordered>
+                  <CardItem style={styles.container}>
+                    {/* <Text>{plant.room.roomname}</Text> */}
+                    <Text>{plant.room.roomname}</Text>
+                  </CardItem>
+                  <CardItem style={styles.container}>
+                    <Image source={{uri: plant.plantInfo.photo}} style={{height:50, width: 50}}/>
+                  </CardItem>
+                </CardItem>
+              </Card>
+            </TouchableOpacity>
+          )
+        })
+  
         return (
-          <TouchableOpacity 
-          key={plant.id} 
-          onPress={()=>navigation.navigate('SinglePlant', {plant: plant})}>
-            <Card>
-              <CardItem bordered style={styles.horizontalContainer}>
-                <Left><Text>{plant.plantInfo.commonname}</Text></Left>
-                {plant.needsWater ?
-                <Right><Button warning onPress={()=>{
-                  this.addWater(plant)
-                }}>
-                <Text>😩💧</Text></Button></Right> :
-                <Right><Button  success><Text>😊✔️</Text></Button></Right>}
-              </CardItem>
-              <CardItem bordered>
-                <CardItem style={styles.container}>
-                  {/* <Text>{plant.room.roomname}</Text> */}
-                  <Text>{plant.room.roomname}</Text>
-                </CardItem>
-                <CardItem style={styles.container}>
-                  <Image source={{uri: plant.plantInfo.photo}} style={{height:50, width: 50}}/>
-                </CardItem>
-              </CardItem>
-            </Card>
-          </TouchableOpacity>
+        
+          <Tab heading={room.roomname}>
+            <ScrollView>
+              {plants}
+            </ScrollView>
+          </Tab>
         )
       })
 
+      
       return (
-        <Tab heading={room}>
-          <ScrollView>
-            {plants}
-          </ScrollView>
-        </Tab>
+        <AppContext.Consumer>
+          {context => {
+            if (context.shouldUpdate) {
+              this.getPlantData()
+              context.setShouldUpdate(false)
+            }
+            return (
+            <View style={styles.itemContainer}>
+              <View>
+                <Header hasTabs />
+              </View>
+              {this.state.rooms.length > 0 && 
+                <Tabs renderTabBar={() => <ScrollableTab/>}>
+                  {roomList}
+                </Tabs>
+              }
+            </View>
+
+            )
+
+          }}
+          </AppContext.Consumer>
+
+
+
+
+
+
+
       )
-    })
-    return (
-      <View style={styles.itemContainer}>
-        {/* Tabs */}
-        <View>
-          <Header hasTabs />
-        </View>
-        {this.state.plants.length > 0 && 
-          <Tabs renderTabBar={() => <ScrollableTab/>}>
-            {roomList}
-          </Tabs>
-        }
-      </View>
-    )
+    }
   }
-}
+
 PlantsFirstScreen.contextType = AppContext;
 
 export default function MyPlants() {
