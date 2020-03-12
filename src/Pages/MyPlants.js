@@ -11,7 +11,6 @@ import { AppContext } from '../../Context';
 // import _ from 'lodash';
 
 const API = 'http://192.168.1.132:5000/app/user/'; 
-// const background = require('../../assets/bachgrund.png');
  
 // const API = 'http://833a33e6.ngrok.io/api/users/2'; 
 const Stack = createStackNavigator();
@@ -28,11 +27,60 @@ class PlantsFirstScreen extends React.Component {
 
   // get rooms array, plants objects
   componentDidMount() {
+
+//     console.log(this.context.loggedIn)
+//     console.log(this.context)
+//     axios.get(API)
+//     .then((res) => {
+//       let rooms = res.data.plants.map((plant)=>plant.room.roomname)
+//       rooms = [...new Set(rooms)]
+//       let plants = [...res.data.plants];
+//       plants.map((item)=>item.needsWater=this.checkWater(item))
+//       // console.log(plants)
+//       this.setState({ user: res.data, rooms: ["All", ...rooms], plants });
+//     })
     this.getPlantData()
   }
-  //checkWater takes in a plant object with waters array.
-  // returns true if plant needs water.
-  // returns false if plant doesn't need water.
+//   checkWater(plant) {
+//     let now = moment();
+//     let recentWater = moment(plant.waters[plant.waters.length-1].watertime);
+//     console.log(moment(recentWater));
+//     if (plant.plantInfo.waterneeds.includes("high")){
+//         if (recentWater > now.subtract(3, 'days')){
+//             return false;
+//         }
+//         return true;
+//     }
+//     if (plant.plantInfo.waterneeds.includes("moderate")){
+//         if (recentWater > now.subtract(8, 'days')){
+//             return false;
+//         }
+//         return true;
+//     }
+//     if (plant.plantInfo.waterneeds.includes("low")){
+//         if (recentWater > now.subtract(3, 'weeks')){
+//             return false;
+//         }
+//         return true;
+//     }
+//     if(plant.plantInfo.waterneeds.includes("dry")){
+//         return false;
+//     }
+//     return true;
+// }
+
+//   async addWater(plant) {
+//     await axios.post(`http://833a33e6.ngrok.io/app/water`, 
+//     {"plantid": plant.id}, {
+//       headers: {
+//         Authorization: `BEARER ${this.context.loggedIn}`
+//       }
+//     })
+//     let current = {...this.state};
+//     let changedPlant = current.plants[current.plants.indexOf(plant)]
+//     changedPlant.needsWater = false;
+//     this.setState({
+//       ...current
 
   getPlantData = () => {
     console.log(this.context)
