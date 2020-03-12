@@ -74,7 +74,7 @@ class Login extends React.Component{
       _login= async (username, password)=> {
         const {navigation} = this.props;
         let temp;
-        let login = await axios.post("http://192.168.0.150:5000/app/user/login", {"username": `${username}`, "password": `${password}`})
+        let login = await axios.post("http://192.168.0.151:5000/app/user/login", {"username": `${username}`, "password": `${password}`})
           .then((res)=> {
             console.log(res)
             this.setState({

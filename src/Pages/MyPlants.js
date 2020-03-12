@@ -10,7 +10,7 @@ import moment from 'moment';
 import { AppContext } from '../../Context';
 // import _ from 'lodash';
 
-const API = 'http://192.168.0.150:5000/app/user/'; 
+const API = 'http://192.168.1.132:5000/app/user/'; 
 // const background = require('../../assets/bachgrund.png');
  
 // const API = 'http://833a33e6.ngrok.io/api/users/2'; 
@@ -46,13 +46,6 @@ class PlantsFirstScreen extends React.Component {
       // console.log(res)
       let rooms = res.data.rooms.map((room)=>{
         room.plants = res.data.plants.filter((plant)=> plant.room.id == room.id);
-        // let rooms = res.data.plants.map((plant)=>plant.room.roomname)
-        // rooms = [...new Set(rooms)]
-        // let plants = [...res.data.plants];
-        // console.log(this.state.rooms)
-        // this.state.rooms.plants.map((item)=>item.needsWater=this.checkWater(item))
-        // // // console.log(plants)
-        // this.setState({ user: res.data, plants});
         return room
       })
       this.setState({
@@ -61,69 +54,69 @@ class PlantsFirstScreen extends React.Component {
       console.log(this.state.rooms)
       console.log(this.state.rooms)
 
-      this.state.rooms.map((room)=>{
-        room.plants.map((plant)=>plant.needsWater=this.checkWater(plant))
-      })
+      // this.state.rooms.map((room)=>{
+      //   // room.plants.map((plant)=>plant.needsWater=this.checkWater(plant))
+      // })
 
     })
   }
 
-  checkWater(plant) {
-    // console.log(plant)
-    // console.log('inside')
-    let now = moment();
-    if(plant.waters.length == 0){
-        return true;
-    }
-    let recentWater = moment(plant.waters[plant.waters.length-1].watertime);
-    // console.log(moment(recentWater));
-    if (plant.plantInfo.waterneeds.includes("high")){
-        if (recentWater > now.subtract(3, 'days')){
-            return false;
-        }
-        return true;
-    }
-    if (plant.plantInfo.waterneeds.includes("moderate")){
-        if (recentWater > now.subtract(8, 'days')){
-            return false;
-        }
-        return true;
-    }
-    if (plant.plantInfo.waterneeds.includes("low")){
-        if (recentWater > now.subtract(3, 'weeks')){
-            return false;
-        }
-        return true;
-    }
-    if(plant.plantInfo.waterneeds.includes("dry")){
-        return false;
-    }
-    return true;
-}
+  // checkWater(plant) {
+//     // console.log(plant)
+//     // console.log('inside')
+//     let now = moment();
+//     if(plant.waters.length == 0){
+//         return true;
+//     }
+//     let recentWater = moment(plant.waters[plant.waters.length-1].watertime);
+//     // console.log(moment(recentWater));
+//     if (plant.plantInfo.waterneeds.includes("high")){
+//         if (recentWater > now.subtract(3, 'days')){
+//             return false;
+//         }
+//         return true;
+//     }
+//     if (plant.plantInfo.waterneeds.includes("moderate")){
+//         if (recentWater > now.subtract(8, 'days')){
+//             return false;
+//         }
+//         return true;
+//     }
+//     if (plant.plantInfo.waterneeds.includes("low")){
+//         if (recentWater > now.subtract(3, 'weeks')){
+//             return false;
+//         }
+//         return true;
+//     }
+//     if(plant.plantInfo.waterneeds.includes("dry")){
+//         return false;
+//     }
+//     return true;
+// }
 
-  async addWater(plant) {
-    // Run the waterplant post, and then confirm it
-    await axios.post(`http://192.168.0.150:5000/app/water`, 
-    {"plantid": plant.id}, {
-      headers: {
-        Authorization: `BEARER ${this.context.loggedIn}`
-      }
-    }, () => {
-      this.setState({
+  // async addWater(plant) {
+  //   // Run the waterplant post, and then confirm it
+  //   await axios.post(`http://192.168.1.132:5000/app/water`, 
+  //   {"plantid": plant.id}, {
+  //     headers: {
+  //       Authorization: `BEARER ${this.context.loggedIn}`
+  //     }
+  //   }, () => {
+  //     this.setState({
 
-      })
-    })
-    // Get the plant, set needsWater to false in state
-    // let current = {...this.state};
-    console.log("*************")
-    // console.log(current)
-    let changedPlant = current.rooms.plants[current.plants.indexOf(plant)]
-    changedPlant.needsWater = false;
-    console.log(plants)
-    this.setState({
-      ...current
-    })
-  }
+  //     })
+  //   })
+  //   // Get the plant, set needsWater to false in state
+  //   // let current = {...this.state};
+  //   console.log("*************")
+  //   // console.log(current)
+  //   let changedPlant = current.rooms.plants[current.plants.indexOf(plant)]
+  //   changedPlant.needsWater = false;
+  //   console.log(plants)
+  //   this.setState({
+  //     ...current
+  //   })
+  // }
 
   render() {
     if(this.props.route?.params?.shouldUpdate) {
@@ -151,12 +144,19 @@ class PlantsFirstScreen extends React.Component {
               <Card>
                 <CardItem bordered style={styles.horizontalContainer}>
                   <Left><Text>{plant.plantInfo.commonname}</Text></Left>
-                  {!plant.needsWater ?
-                  <Right><Button warning onPress={
-                    this.addWater(plant)
-                  }>
-                  <Text>😩💧</Text></Button></Right> :
-                  <Right><Button  success><Text>😊✔️</Text></Button></Right>}
+                  {/* {!plant.needsWater ? */}
+                  <Right>
+                    <Button warning 
+                    // onPress={
+                  //   this.addWater(plant)
+                  // }
+                  >
+                    <Text>😩💧</Text>
+                  </Button>
+                  </Right> 
+                  {/* : */}
+                  <Right><Button  success><Text>😊✔️</Text></Button></Right>
+                  {/* } */}
                 </CardItem>
                 <CardItem bordered>
                   <CardItem style={styles.container}>

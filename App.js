@@ -4,6 +4,8 @@ import MyProfile from './src/Pages/MyProfile';
 import Add from './src/Pages/Add';
 import Calendar from './src/Pages/Calendar';
 import Login from './src/Intros/Login';
+import getTheme from './native-base-theme/components';
+import material from './native-base-theme/variables/material';
 
 
 import 'react-native-gesture-handler';
